@@ -1,0 +1,5 @@
+tensorflow
+sklearn
+matplotlib
+idx2numpy
+h5py<3.0.0
