@@ -19,6 +19,8 @@ jobs:
         shell: bash
         run: |
           cml-runner \
+          --reuse \
+          --cloud-spot \
           --cloud aws \
           --cloud-region us-west \
           --cloud-type=g3.4xlarge \
@@ -41,7 +43,7 @@ jobs:
 
     - name: cml
       run: |
-        pip install -r requirements
+        pip install -r requirements.txt
 
         python train.py
         
