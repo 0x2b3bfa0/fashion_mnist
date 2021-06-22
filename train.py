@@ -36,7 +36,7 @@ def create_model():
     global INITIAL_EPOCH
     try:
         model = tf.keras.models.load_model(model_path())
-        with open(model_path() + 'epoch', 'r') as fh:
+        with open(model_path() + '.epoch', 'r') as fh:
             INITIAL_EPOCH = int(fh.readline());
         
         print('Model found. Resuming...')
@@ -70,7 +70,7 @@ def save_model(epoch, logs):
 
     model.save(model_path())
 
-    with open(model_path() + 'epoch', 'w') as outfile:
+    with open(model_path() + '.epoch', 'w') as outfile:
         outfile.write(str(epoch) + "\n")
 
 def log_metrics(epoch, logs):

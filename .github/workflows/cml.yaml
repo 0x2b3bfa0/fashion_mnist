@@ -51,4 +51,4 @@ jobs:
         cat metrics.txt >> report.md
         cml-publish confusion_matrix.png --md >> report.md
         cml-send-comment report.md 
-        cml-pr **/*.h5
+        cml-pr **/*.h5*
