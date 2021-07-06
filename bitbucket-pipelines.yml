@@ -1,0 +1,26 @@
+image: dvcorg/cml:0-dvc2-base1
+
+pipelines:
+  default:
+    - step:
+        script:
+          - sudo apt update && sudo apt install awscli
+        
+          - pip install -r requirements.txt
+          
+          - TB_URL=$(cml-tensorboard-dev --md \
+            --logdir output/tblogs \
+            --name "Go to tensorboard")
+
+          - echo "# CML report" > report.md
+          - echo $TB_URL >> report.md
+          - cml-send-comment report.md
+
+          - python train.py
+          
+          - echo "# CML report" > report.md
+          - cml-pr --md output/* >> report.md
+          - echo $TB_URL >> report.md
+          - cat output/metrics.txt >> report.md
+          - cml-publish output/confusion_matrix.png --md >> report.md
+          - cml-send-comment report.md
