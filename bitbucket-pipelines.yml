@@ -8,9 +8,7 @@ pipelines:
         
           - pip install -r requirements.txt
           
-          - TB_URL=$(cml-tensorboard-dev --md \
-            --logdir output/tblogs \
-            --name "Go to tensorboard")
+          - TB_URL="NOT READY"
 
           - echo "# CML report" > report.md
           - echo $TB_URL >> report.md
