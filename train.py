@@ -11,7 +11,7 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 S3_BUCKET = 'daviddvctest/mycache'
 
-EPOCHS = 11
+EPOCHS = 3
 CHECKPOINT_FOLDER = 'output'
 CHECKPOINT_NAME = 'seq.h5'
 TB_LOG_DIR = os.path.join(CHECKPOINT_FOLDER, 'tblogs')
@@ -40,7 +40,7 @@ def sync_s3(push=False):
 
         if not repo:
             repo = os.environ.get('CI_PROJECT_NAME', False)
-            run_id = os.environ.get('CI_JOB_ID')
+            run_id = os.environ.get('CI_PIPELINE_ID')
 
         if not repo:
             repo = os.environ.get('BITBUCKET_REPO_FULL_NAME', False)
