@@ -19,7 +19,7 @@ run:
   stage: run
   when: on_success
   tags:
-    - cml-runner-gl
+    - cml-runner-gl-local
   image: dvcorg/cml:0-dvc2-base1
   script:
     - sudo npm install git://github.com/iterative/cml.git#spot-not-terminating
