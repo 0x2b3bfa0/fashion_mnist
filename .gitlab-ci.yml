@@ -22,6 +22,8 @@ run:
     - cml-runner
   image: dvcorg/cml:0-dvc2-base1
   script:
+    - sudo npm install git://github.com/iterative/cml.git#spot-not-terminating
+
     - sudo apt update && sudo apt install awscli
         
     - pip install -r requirements.txt
