@@ -12,14 +12,14 @@ deploy_job:
       --cloud aws  
       --cloud-region us-west  
       --cloud-type t2.medium 
-      --labels=cml-runner
+      --labels=cml-runner-gl
 
 run:
   # timeout: 2 minutes
   stage: run
   when: on_success
   tags:
-    - cml-runner
+    - cml-runner-gl
   image: dvcorg/cml:0-dvc2-base1
   script:
     - sudo npm install git://github.com/iterative/cml.git#spot-not-terminating
