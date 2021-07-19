@@ -43,22 +43,5 @@ jobs:
         AWS_EC2_METADATA_DISABLED: true
         TB_CREDENTIALS: ${{ secrets.TB_CREDENTIALS }}
       run: |
-        ksdjksjdksjdksjd
-        sudo apt update && sudo apt install awscli
+        echo 'nice'
         
-        pip install -r requirements.txt
-        
-        TB_URL="NOT READY"
-
-        echo "# CML report" > report.md
-        echo $TB_URL >> report.md
-        cml-send-comment --update report.md
-
-        python train.py
-        
-        echo "# CML report" > report.md
-        cml-pr --md output/* >> report.md
-        echo $TB_URL >> report.md
-        cat output/metrics.txt >> report.md
-        cml-publish output/confusion_matrix.png --md >> report.md
-        cml-send-comment --update report.md
