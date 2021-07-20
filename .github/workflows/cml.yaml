@@ -3,33 +3,33 @@ name: train-my-model
 on: [push]
 
 jobs:
-  # deploy-runner:
-  #   env:
-  #     REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  deploy-runner:
+    env:
+      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  #   runs-on: [ubuntu-latest]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: iterative/setup-cml@v1
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: iterative/setup-cml@v1
 
-  #     - name: deploy
-  #       shell: bash
-  #       run: |
-  #         cml-runner \
-  #         --cloud-spot \
-  #         --cloud aws \
-  #         --cloud-region us-west \
-  #         --cloud-type t2.medium \
-  #         --labels test2
+      - name: deploy
+        shell: bash
+        run: |
+          cml-runner \
+          --cloud-spot \
+          --cloud aws \
+          --cloud-region us-west \
+          --cloud-type t2.medium \
+          --labels cml
 
   run:
     timeout-minutes: 5000
-    runs-on: [self-hosted,gpu]
-    #needs: deploy-runner
-    #container: 
-      #image: docker://dvcorg/cml:0-dvc2-base1
+    runs-on: [self-hosted,cml]
+    needs: deploy-runner
+    container: 
+      image: docker://dvcorg/cml:0-dvc2-base1
 
     steps:
     - uses: actions/checkout@v2
@@ -43,5 +43,21 @@ jobs:
         AWS_EC2_METADATA_DISABLED: true
         TB_CREDENTIALS: ${{ secrets.TB_CREDENTIALS }}
       run: |
-        echo 'nice'
+        sudo apt update && sudo apt install awscli
         
+        pip install -r requirements.txt
+        
+        TB_URL="NOT READY"
+
+        echo "# CML report" > report.md
+        echo $TB_URL >> report.md
+        cml-send-comment --update report.md
+
+        python train.py
+        
+        echo "# CML report" > report.md
+        cml-pr --md output/* >> report.md
+        echo $TB_URL >> report.md
+        cat output/metrics.txt >> report.md
+        cml-publish output/confusion_matrix.png --md >> report.md
+        cml-send-comment --update report.md
