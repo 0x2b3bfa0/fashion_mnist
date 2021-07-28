@@ -26,7 +26,7 @@ jobs:
 
   run:
     timeout-minutes: 5000
-    runs-on: [self-hosted,cml]
+    runs-on: [self-hosted,cml2]
     # needs: deploy-runner
     container: 
       image: docker://dvcorg/cml:0-dvc2-base1
