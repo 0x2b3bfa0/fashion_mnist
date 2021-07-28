@@ -20,7 +20,7 @@ jobs:
         run: |
           cml-runner \
           --cloud-spot \
-          --cloud gcp \
+          --cloud aws \
           --cloud-type m \
           --labels cml
 
