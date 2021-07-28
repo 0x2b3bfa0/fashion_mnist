@@ -18,6 +18,8 @@ jobs:
       - name: deploy
         shell: bash
         run: |
+          npm install -g https://github.com/iterative/cml.git#dead-runner 
+
           cml-runner \
           --cloud-spot \
           --cloud aws \
