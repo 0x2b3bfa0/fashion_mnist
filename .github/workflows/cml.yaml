@@ -20,13 +20,13 @@ jobs:
         run: |
           cml-runner \
           --cloud-spot \
-          --cloud aws \
-          --cloud-type t2.medium \
-          --labels cml4
+          --cloud gcp \
+          --cloud-type m \
+          --labels cml5
 
   run:
     timeout-minutes: 5000
-    runs-on: [self-hosted,cml4]
+    runs-on: [self-hosted,cml5]
     needs: deploy-runner
     container: 
       image: docker://dvcorg/cml:0-dvc2-base1
