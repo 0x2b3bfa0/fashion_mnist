@@ -24,6 +24,7 @@ jobs:
         shell: bash
         run: |
           cml-runner \
+          --reuse \
           --cloud-spot \
           --cloud aws \
           --cloud-type t2.medium \
