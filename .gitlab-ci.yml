@@ -13,6 +13,7 @@ deploy_job:
       --cloud-region us-west  
       --cloud-type t2.medium 
       --labels=cml-runner-gl
+      
 
 run:
   # timeout: 2 minutes
