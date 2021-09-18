@@ -2,6 +2,8 @@ name: casper-test
 
 on: [push]
 
-run:
-    runs-on: [self-hosted,casper]
-    run: echo $MY_VAR
+jobs:
+  casper-test:
+    run:
+        runs-on: [self-hosted,casper]
+        run: echo $MY_VAR
