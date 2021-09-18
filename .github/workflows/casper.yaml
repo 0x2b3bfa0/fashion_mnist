@@ -4,6 +4,7 @@ on: [push]
 
 jobs:
   casper-test:
-    run:
-        runs-on: [self-hosted,casper]
-        run: echo $MY_VAR
+    runs-on: [self-hosted,casper]
+    steps:
+      - name: test
+          run: echo $MY_VAR
