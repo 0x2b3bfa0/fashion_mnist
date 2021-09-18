@@ -7,4 +7,4 @@ jobs:
     runs-on: [self-hosted,casper]
     steps:
       - name: test
-          run: echo $MY_VAR
+        run: echo $MY_VAR
