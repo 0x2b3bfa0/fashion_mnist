@@ -1,0 +1,7 @@
+name: casper-test
+
+on: [push]
+
+run:
+    runs-on: [self-hosted,casper]
+    run: echo $MY_VAR
