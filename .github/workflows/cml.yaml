@@ -47,7 +47,8 @@ jobs:
         python-version: '3.6'
 
     - name: cml
-      env:
+      
+      #env:
         #DVC_EXP_AUTO_PUSH: "1"
         #DVC_EXP_GIT_REMOTE: 
       run: |
