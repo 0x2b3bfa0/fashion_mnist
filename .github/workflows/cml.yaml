@@ -51,18 +51,14 @@ jobs:
         git config --local user.name 'davidgortega'
         git config --local user.name 'g.ortega.david@gmail.com'
         export DVC_EXP_AUTO_PUSH='true'
-        export DVC_EXP_GIT_REMOTE="https://davidgortega:${REPO_TOKEN}@github.com/DavidGOrtega/fashion_mnist.git"
-        
+        export DVC_EXP_GIT_REMOTE="https://github.com/DavidGOrtega/fashion_mnist.git"
+
         pip install -r requirements.txt
 
         dvc pull --run-cache || echo 'Forgive this :pray:'
-        ls model || echo 'no model dir'
-        dvc exp run
+        dvc exp run --pull
         dvc push --run-cache
 
-        ls model
-        cat model/seq.h5.epoch
-        
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md
         cml-send-comment report.md 
