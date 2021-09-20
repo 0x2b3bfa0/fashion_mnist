@@ -53,8 +53,10 @@ jobs:
         pip install -r requirements.txt
 
         dvc pull || echo 'Forgive this :pray:'
+        ls model
         dvc exp run
         dvc push
+        ls model
         
         echo "# CML report" > report.md
       

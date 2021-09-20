@@ -65,6 +65,8 @@ def create_model():
 model = create_model();
 
 def save_model(epoch, logs):
+    print('Saving epoch ' + str(epoch))
+
     if not os.path.exists(CHECKPOINT_FOLDER):
         os.makedirs(CHECKPOINT_FOLDER)
 
