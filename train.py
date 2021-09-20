@@ -12,7 +12,7 @@ print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 S3_BUCKET = 'daviddvctest/mycache'
 
-EPOCHS = 100
+EPOCHS = 8
 CHECKPOINT_FOLDER = 'model'
 CHECKPOINT_NAME = 'seq.h5'
 TB_LOG_DIR = os.path.join(CHECKPOINT_FOLDER, 'tblogs')
