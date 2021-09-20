@@ -57,7 +57,9 @@ jobs:
         ls model || echo 'no model dir'
         dvc exp run
         dvc push --run-cache
+        
         ls model
+        cat model/seq.h5.epoch
         
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md
