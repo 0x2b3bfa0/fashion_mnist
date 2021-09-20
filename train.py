@@ -122,11 +122,11 @@ def save_model(epoch, logs):
 def log_metrics(epoch, logs):
     print(epoch, logs)
 
-    accuracy = str(logs.get('val_accuracy', logs.get('val_acc')))
-    loss = str(logs['loss'])
+    accuracy = logs.get('val_accuracy', logs.get('val_acc'))
+    loss = logs['loss']
 
     with open(model_metrics(), 'w') as fh:
-        fh.write("Accuracy: " + accuracy + "\n" + "Loss: " + loss + "\n")
+        fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(loss) + "\n")
 
     dvclive.log('Accuracy', accuracy)
     dvclive.log('Loss', loss)
