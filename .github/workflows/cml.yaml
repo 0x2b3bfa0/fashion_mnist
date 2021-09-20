@@ -2,6 +2,11 @@ name: train-my-model
 
 on: [push]
 
+env:
+  REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
 jobs:
   # deploy-runner:
   #   runs-on: [ubuntu-latest]
@@ -45,15 +50,7 @@ jobs:
       env:
         DVC_CHECKPOINTS_AUTOPUSH: "1"
       run: |
-        sudo apt update && sudo apt install awscli
-        
         pip install -r requirements.txt
-        
-        TB_URL="NOT READY"
-
-        echo "# CML report" > report.md
-        echo $TB_URL >> report.md
-        cml-send-comment --update report.md
 
         dvc pull || echo 'Forgive this :pray:'
         ls model || echo 'no model dir'
