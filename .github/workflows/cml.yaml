@@ -47,10 +47,9 @@ jobs:
         python-version: '3.6'
 
     - name: cml
-      
       env:
         DVC_EXP_AUTO_PUSH: 'true'
-        #DVC_EXP_GIT_REMOTE: 
+        DVC_EXP_GIT_REMOTE: 'https://github.com/DavidGOrtega/fashion_mnist.git'
       run: |
         pip install -r requirements.txt
 
@@ -60,4 +59,6 @@ jobs:
         dvc push --run-cache
         ls model
         
-       
+        echo "# CML report" > report.md
+        cml-publish model/confusion_matrix.png --md >> report.md
+        cml-send-comment report.md 

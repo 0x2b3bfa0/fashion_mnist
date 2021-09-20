@@ -6,6 +6,7 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import tensorflow as tf
+import dvclive
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
@@ -121,9 +122,15 @@ def save_model(epoch, logs):
 def log_metrics(epoch, logs):
     print(epoch, logs)
 
+    accuracy = str(logs.get('val_accuracy', logs.get('val_acc')))
+    loss = str(logs['loss'])
+
     with open(model_metrics(), 'w') as fh:
-        accuracy = logs.get('val_accuracy', logs.get('val_acc'))
-        fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(logs['loss']) + "\n")
+        fh.write("Accuracy: " + accuracy + "\n" + "Loss: " + loss + "\n")
+
+    dvclive.log('Accuracy', accuracy)
+    dvclive.log('Loss', loss)
+    dvclive.next_step()
 
 def log_confusion_matrix(epoch, logs):
     test_pred = np.argmax(model.predict(test_images), axis=1)
