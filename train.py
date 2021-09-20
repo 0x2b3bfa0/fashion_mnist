@@ -91,8 +91,8 @@ def create_model(checkpoints_path):
 
     return model
 
-print('Retrieving cache...')
-sync_s3()
+# print('Retrieving cache...')
+# sync_s3()
 try: 
     with open(model_path_info(), 'r') as fh:
         initial_epoch = int(fh.readline());       
