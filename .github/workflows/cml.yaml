@@ -58,7 +58,4 @@ jobs:
         dvc push --run-cache
         ls model
         
-        echo "# CML report" > report.md
-      
-        cml-publish model/confusion_matrix.png --md >> report.md
-        cml-send-comment report.md 
+       
