@@ -111,10 +111,10 @@ history = model.fit(train_images,
           verbose=0,
           callbacks=[
             tf.keras.callbacks.LambdaCallback(on_epoch_end=save_model),
-            tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
+            #tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
             tf.keras.callbacks.LambdaCallback(on_epoch_end=log_confusion_matrix),
           ],
           validation_data=(test_images, test_labels))
 
-log_metrics(INITIAL_EPOCH, history.history)
+# log_metrics(INITIAL_EPOCH, history.history)
 log_confusion_matrix(INITIAL_EPOCH, None)
