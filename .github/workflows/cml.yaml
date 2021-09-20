@@ -38,6 +38,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: deps
+      run: |
+        sudo apt-get install libpango1.0-dev
+
     - uses: iterative/setup-cml@v1
 
     - uses: iterative/setup-dvc@v1
