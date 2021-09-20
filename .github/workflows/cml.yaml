@@ -48,7 +48,8 @@ jobs:
 
     - name: cml
       env:
-        DVC_EXP_AUTO_PUSH: "1"
+        #DVC_EXP_AUTO_PUSH: "1"
+        #DVC_EXP_GIT_REMOTE: 
       run: |
         pip install -r requirements.txt
 
