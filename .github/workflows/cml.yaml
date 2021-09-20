@@ -48,7 +48,7 @@ jobs:
 
     - name: cml
       
-      #env:
+      env:
         DVC_EXP_AUTO_PUSH: 'true'
         #DVC_EXP_GIT_REMOTE: 
       run: |
