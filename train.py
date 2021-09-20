@@ -1,6 +1,4 @@
-import io
 import os
-from datetime import datetime
 import itertools
 
 import idx2numpy
@@ -9,10 +7,14 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+
+S3_BUCKET = 'daviddvctest/mycache'
+
 EPOCHS = 1
-INITIAL_EPOCH = 0
 CHECKPOINT_FOLDER = 'model'
 CHECKPOINT_NAME = 'seq.h5'
+TB_LOG_DIR = os.path.join(CHECKPOINT_FOLDER, 'tblogs')
 
 # Load the data.
 train_images = idx2numpy.convert_from_file("data/train-images-idx3-ubyte")
@@ -29,20 +31,48 @@ test_images = test_images.reshape(10000, 28, 28, 1)
 class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
+def sync_s3(push=False):
+    s3_path = os.path.join('s3://', S3_BUCKET)
+
+    if os.environ.get('CI', False):
+        repo = os.environ.get('GITHUB_REPOSITORY', False)
+        run_id = os.environ.get('GITHUB_RUN_ID')
+
+        if not repo:
+            repo = os.environ.get('CI_PROJECT_NAME', False)
+            run_id = os.environ.get('CI_PIPELINE_ID')
+
+        if not repo:
+            repo = os.environ.get('BITBUCKET_REPO_FULL_NAME', False)
+            run_id = os.environ.get('BITBUCKET_BUILD_NUMBER')  
+ 
+        s3_path = os.path.join(s3_path, repo, run_id)
+
+    command = 'aws s3 sync ' + s3_path + ' ' + CHECKPOINT_FOLDER
+    if push:
+        command = 'aws s3 sync ' + CHECKPOINT_FOLDER + ' ' + s3_path
+            
+    os.system(command)
+
 def model_path():
     return os.path.join(CHECKPOINT_FOLDER, CHECKPOINT_NAME)
 
-def create_model():
-    global INITIAL_EPOCH
+def model_path_info():
+    return model_path() + '.epoch'
+
+def model_metrics():
+    return os.path.join(CHECKPOINT_FOLDER, 'metrics.txt')
+
+def model_cmatrix():
+    return os.path.join(CHECKPOINT_FOLDER, 'confusion_matrix.png')
+
+def create_model(checkpoints_path):
     try:
-        model = tf.keras.models.load_model(model_path())
-        with open(model_path() + '.epoch', 'r') as fh:
-            INITIAL_EPOCH = int(fh.readline());
-        
+        model = tf.keras.models.load_model(checkpoints_path)
         print('Model found. Resuming...')
         return model
     except:
-        print('No checkpoints found.')
+        print('Failed loading checkpoints. Starting from zero...')
 
     # Build classifier
     model = tf.keras.models.Sequential([
@@ -61,24 +91,39 @@ def create_model():
 
     return model
 
-# Train the classifier
-model = create_model();
+print('Retrieving cache...')
+sync_s3()
+try: 
+    with open(model_path_info(), 'r') as fh:
+        initial_epoch = int(fh.readline());       
+except:
+    initial_epoch = 0
+
+if (initial_epoch > 0 and initial_epoch == EPOCHS):
+    print('Nothing to do. Model is already trained')
+    exit()
+
+model = create_model(model_path());
 
 def save_model(epoch, logs):
-    print('Saving epoch ' + str(epoch))
+    print("saving epoch:" + str(epoch))
 
     if not os.path.exists(CHECKPOINT_FOLDER):
         os.makedirs(CHECKPOINT_FOLDER)
 
     model.save(model_path())
 
-    with open(model_path() + '.epoch', 'w') as outfile:
-        outfile.write(str(epoch) + "\n")
+    with open(model_path_info(), 'w') as outfile:
+        outfile.write(str(epoch+1) + "\n")
+
+    sync_s3(push=True)
 
 def log_metrics(epoch, logs):
-    with open("metrics.txt", 'w') as outfile:
-        outfile.write("Accuracy: " + str(logs['val_acc']) + "\n")
-        outfile.write("Loss: " + str(logs['loss']) + "\n")
+    print(epoch, logs)
+
+    with open(model_metrics(), 'w') as fh:
+        accuracy = logs.get('val_accuracy', logs.get('val_acc'))
+        fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(logs['loss']) + "\n")
 
 def log_confusion_matrix(epoch, logs):
     test_pred = np.argmax(model.predict(test_images), axis=1)
@@ -104,19 +149,18 @@ def log_confusion_matrix(epoch, logs):
     plt.xlabel('Predicted label')
     plt.title('Epoch ' + str(epoch))
 
-    plt.savefig('confusion_matrix.png')
+    plt.savefig(model_cmatrix())
 
-history = model.fit(train_images,
+model.fit(train_images,
           train_labels,
           epochs=EPOCHS,
-          initial_epoch=INITIAL_EPOCH,
+          initial_epoch=initial_epoch,
           verbose=0,
           callbacks=[
-            tf.keras.callbacks.LambdaCallback(on_epoch_end=save_model),
-            #tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
+            tf.keras.callbacks.TensorBoard(log_dir=TB_LOG_DIR, histogram_freq=1),
+            tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
             tf.keras.callbacks.LambdaCallback(on_epoch_end=log_confusion_matrix),
+            tf.keras.callbacks.LambdaCallback(on_epoch_end=save_model)
           ],
           validation_data=(test_images, test_labels))
 
-# log_metrics(INITIAL_EPOCH, history.history)
-log_confusion_matrix(INITIAL_EPOCH, None)

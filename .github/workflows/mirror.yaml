@@ -1,0 +1,23 @@
+name: Mirroring
+
+on: [push, delete]
+jobs:
+  to_gitlab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: spyoungtech/mirror-action@master
+        with:
+          REMOTE: 'https://gitlab.com/DavidGOrtega/fashion-mnist.git'
+          GIT_USERNAME: DavidGOrtega
+          GIT_PASSWORD: ${{ secrets.GL_TOKEN }}
+
+  to_bitbucket:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: spyoungtech/mirror-action@master
+        with:
+          REMOTE: 'https://DavidOrtega@bitbucket.org/DavidOrtega/fashion-mnist.git'
+          GIT_USERNAME: DavidGOrtega
+          GIT_PASSWORD: ${{ secrets.BB_TOKEN }}
