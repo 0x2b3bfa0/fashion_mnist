@@ -8,47 +8,55 @@ env:
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 jobs:
-  deploy-runner:
-    runs-on: [ubuntu-latest]
-    steps:
-      - uses: actions/checkout@v2
+  # deploy-runner:
+  #   runs-on: [ubuntu-latest]
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - uses: iterative/setup-cml@v1
+  #     - uses: iterative/setup-cml@v1
 
-      - name: deploy
-        shell: bash
-        run: |
-          cml-runner \
-          --reuse \
-          --cloud-spot \
-          --cloud aws \
-          --cloud-region us-west \
-          --cloud-type=g3.4xlarge \
-          --cloud-hdd-size 64 \
-          --labels=gpu
+  #     - name: deploy
+  #       shell: bash
+  #       run: |
+  #         cml-runner \
+  #         --reuse \
+  #         --cloud-spot \
+  #         --cloud aws \
+  #         --cloud-region us-west \
+  #         --cloud-type=g3.4xlarge \
+  #         --cloud-hdd-size 64 \
+  #         --labels=gpu
 
   run:
     needs: deploy-runner
-    runs-on: [self-hosted,gpu]
-    container: 
-      image: docker://dvcorg/cml:0-dvc2-base1-gpu
-      options: --gpus all
+    # runs-on: [self-hosted,gpu]
+    # container: 
+    #   image: docker://dvcorg/cml:0-dvc2-base1-gpu
+    #   options: --gpus all
 
     steps:
     - uses: actions/checkout@v2
+
+    - uses: actions/setup-cml@v1
+    
+    - uses: actions/setup-dvc@v1
 
     - uses: actions/setup-python@v2
       with:
         python-version: '3.6'
 
     - name: cml
+      env:
+        DVC_CHECKPOINTS_AUTOPUSH: "1"
       run: |
         pip install -r requirements.txt
 
-        python train.py
+        dvc pull || echo 'Forgive this :pray:'
+        dvc exp run
+        dvc push
         
         echo "# CML report" > report.md
         cat metrics.txt >> report.md
         cml-publish confusion_matrix.png --md >> report.md
         cml-send-comment report.md 
-        cml-pr **/*.h5*
+        cml-pr dvc.lock

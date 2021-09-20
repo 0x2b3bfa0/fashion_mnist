@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-EPOCHS = 2
+EPOCHS = 1
 INITIAL_EPOCH = 0
 CHECKPOINT_FOLDER = 'model'
 CHECKPOINT_NAME = 'seq.h5'
