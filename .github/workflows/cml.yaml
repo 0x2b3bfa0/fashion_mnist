@@ -48,7 +48,7 @@ jobs:
 
     - name: cml
       env:
-        DVC_CHECKPOINTS_AUTOPUSH: "1"
+        DVC_EXP_AUTO_PUSH: "1"
       run: |
         pip install -r requirements.txt
 
