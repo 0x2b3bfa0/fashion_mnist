@@ -28,7 +28,7 @@ jobs:
   #         --labels=gpu
 
   run:
-    needs: deploy-runner
+    #needs: deploy-runner
     runs-on: [ubuntu-latest]
     # runs-on: [self-hosted,gpu]
     # container: 
