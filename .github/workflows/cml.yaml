@@ -37,6 +37,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      env:
+        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
 
     - name: deps
       run: |
@@ -59,12 +61,12 @@ jobs:
         AWS_DEFAULT_REGION: us-east-1
         AWS_EC2_METADATA_DISABLED: true
         DVC_EXP_AUTO_PUSH: 'true'
-        DVC_EXP_GIT_REMOTE: ${{ secrets.DVC_EXP_GIT_REMOTE }}
+        DVC_EXP_GIT_REMOTE: origin
       run: |
         pip install -r requirements.txt
 
         # python train.py
-        
+
         dvc pull --run-cache || echo 'Forgive this :pray:'
         dvc exp run --pull
         dvc push --run-cache

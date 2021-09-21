@@ -1,4 +1,4 @@
 [core]
     remote = storage
 ['remote "storage"']
-    url = s3://cml-checkpoints/dvc-fashion-mnist5
+    url = s3://cml-checkpoints/dvc-fashion-mnist6
