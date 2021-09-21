@@ -60,9 +60,11 @@ jobs:
 
         pip install -r requirements.txt
 
-        dvc pull --run-cache || echo 'Forgive this :pray:'
-        dvc exp run --pull
-        dvc push --run-cache
+        # dvc pull --run-cache || echo 'Forgive this :pray:'
+        # dvc exp run --pull
+        # dvc push --run-cache
+
+        python train.py
 
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md
