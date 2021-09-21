@@ -61,8 +61,7 @@ jobs:
       run: |
 
         pip install -r requirements.txt
-
-        aws s3 sync s3://cml-checkpoints/mycache2 model
+        
         python train.py
 
         # export DVC_EXP_AUTO_PUSH='true'
