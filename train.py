@@ -10,9 +10,9 @@ import dvclive
 
 print('Num GPUs Available: ', len(tf.config.list_physical_devices('GPU')))
 
-print('Environment variables')
-for k, v in sorted(os.environ.items()):
-    print(k+':', v)
+# print('Environment variables')
+# for k, v in sorted(os.environ.items()):
+#     print(k+':', v)
 
 S3_BUCKET = 'cml-checkpoints/mycache'
 
@@ -56,6 +56,7 @@ def sync_s3(push=False):
     command = 'aws s3 sync ' + s3_path + ' ' + CHECKPOINT_FOLDER
     if push:
         command = 'aws s3 sync ' + CHECKPOINT_FOLDER + ' ' + s3_path
+        print('Pushing ' + command)
             
     os.system(command)
 
