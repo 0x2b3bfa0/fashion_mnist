@@ -14,7 +14,7 @@ print('Num GPUs Available: ', len(tf.config.list_physical_devices('GPU')))
 # for k, v in sorted(os.environ.items()):
 #     print(k+':', v)
 
-S3_BUCKET = 'cml-checkpoints/mycache2'
+S3_BUCKET = 'cml-checkpoints/mycache'
 
 EPOCHS = 2
 CHECKPOINT_FOLDER = 'model'
@@ -39,19 +39,19 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
 def sync_s3(push=False):
     s3_path = os.path.join('s3://', S3_BUCKET)
 
-    # if os.environ.get('CI', False):
-    #     repo = os.environ.get('GITHUB_REPOSITORY', False)
-    #     run_id = os.environ.get('GITHUB_RUN_ID')
+    if os.environ.get('CI', False):
+        repo = os.environ.get('GITHUB_REPOSITORY', False)
+        run_id = os.environ.get('GITHUB_RUN_ID')
 
-    #     if not repo:
-    #         repo = os.environ.get('CI_PROJECT_NAME', False)
-    #         run_id = os.environ.get('CI_PIPELINE_ID')
+        if not repo:
+            repo = os.environ.get('CI_PROJECT_NAME', False)
+            run_id = os.environ.get('CI_PIPELINE_ID')
 
-    #     if not repo:
-    #         repo = os.environ.get('BITBUCKET_REPO_FULL_NAME', False)
-    #         run_id = os.environ.get('BITBUCKET_BUILD_NUMBER')  
+        if not repo:
+            repo = os.environ.get('BITBUCKET_REPO_FULL_NAME', False)
+            run_id = os.environ.get('BITBUCKET_BUILD_NUMBER')  
  
-    #     s3_path = os.path.join(s3_path, repo, run_id)
+        s3_path = os.path.join(s3_path, repo, run_id)
 
     command = 'aws s3 sync ' + s3_path + ' ' + CHECKPOINT_FOLDER
     if push:
