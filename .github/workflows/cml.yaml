@@ -67,6 +67,10 @@ jobs:
 
         # python train.py
 
+        git config --global user.email "g.ortega.david@gmail.com"
+        git config --global user.name "DavidGOrtega"
+        git remote rm origin
+        git remote add origin "https://DavidGOrtega:${REPO_TOKEN}@github.com/DavidGOrtega/fashion_mnist.git"
         dvc pull --run-cache || echo 'Forgive this :pray:'
         dvc exp run --pull
         dvc push --run-cache
