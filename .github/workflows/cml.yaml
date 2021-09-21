@@ -52,13 +52,18 @@ jobs:
         python-version: '3.6'
 
     - name: cml
-      run: |
-        git config --local user.name 'davidgortega'
-        git config --local user.name 'g.ortega.david@gmail.com'
-        export DVC_EXP_AUTO_PUSH='true'
-        export DVC_EXP_GIT_REMOTE="https://github.com/DavidGOrtega/fashion_mnist.git"
+      env:
+        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      run: |
         pip install -r requirements.txt
+
+        # git config --local user.name 'davidgortega'
+        # git config --local user.name 'g.ortega.david@gmail.com'
+        # export DVC_EXP_AUTO_PUSH='true'
+        # export DVC_EXP_GIT_REMOTE="https://github.com/DavidGOrtega/fashion_mnist.git"
 
         # dvc pull --run-cache || echo 'Forgive this :pray:'
         # dvc exp run --pull
