@@ -64,7 +64,7 @@ jobs:
         # python train.py
 
         export DVC_EXP_AUTO_PUSH='true'
-        export DVC_EXP_GIT_REMOTE="https://davidgortega:${REPO_TOKEN}@github.com/DavidGOrtega/fashion_mnist.git"
+        export DVC_EXP_GIT_REMOTE="https://DavidGOrtega:${REPO_TOKEN}@github.com/DavidGOrtega/fashion_mnist.git"
         dvc pull --run-cache || echo 'Forgive this :pray:'
         dvc exp run --pull
         dvc push --run-cache
