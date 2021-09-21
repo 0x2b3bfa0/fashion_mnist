@@ -8,7 +8,11 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import dvclive
 
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+print('Num GPUs Available: ', len(tf.config.list_physical_devices('GPU')))
+
+print('Environment variables')
+for k, v in sorted(os.environ.items()):
+    print(k+':', v)
 
 S3_BUCKET = 'cml-checkpoints/mycache'
 
