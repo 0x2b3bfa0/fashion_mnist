@@ -59,16 +59,15 @@ jobs:
         AWS_DEFAULT_REGION: us-east-1
         AWS_EC2_METADATA_DISABLED: true
       run: |
-
         pip install -r requirements.txt
-        
-        python train.py
 
-        # export DVC_EXP_AUTO_PUSH='true'
-        # export DVC_EXP_GIT_REMOTE="https://github.com/DavidGOrtega/fashion_mnist.git"
-        # dvc pull --run-cache || echo 'Forgive this :pray:'
-        # dvc exp run --pull
-        # dvc push --run-cache
+        # python train.py
+
+        export DVC_EXP_AUTO_PUSH='true'
+        export DVC_EXP_GIT_REMOTE="https://davidgortega:${REPO_TOKEN}@github.com/DavidGOrtega/fashion_mnist.git"
+        dvc pull --run-cache || echo 'Forgive this :pray:'
+        dvc exp run --pull
+        dvc push --run-cache
 
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md

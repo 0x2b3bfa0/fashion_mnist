@@ -56,9 +56,8 @@ def sync_s3(push=False):
     command = 'aws s3 sync ' + s3_path + ' ' + CHECKPOINT_FOLDER
     if push:
         command = 'aws s3 sync ' + CHECKPOINT_FOLDER + ' ' + s3_path
-        print('Pushing ' + command)
             
-    os.system(command)
+    # os.system(command)
 
 def model_path():
     return os.path.join(CHECKPOINT_FOLDER, CHECKPOINT_NAME)
