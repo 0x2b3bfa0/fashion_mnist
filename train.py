@@ -10,7 +10,7 @@ import dvclive
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-S3_BUCKET = 'checkpoints/mycache'
+S3_BUCKET = 'cml-checkpoints/mycache'
 
 EPOCHS = 2
 CHECKPOINT_FOLDER = 'model'
