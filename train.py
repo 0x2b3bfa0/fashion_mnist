@@ -10,9 +10,9 @@ import dvclive
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-S3_BUCKET = 'daviddvctest/mycache'
+S3_BUCKET = 'checkpoints/mycache'
 
-EPOCHS = 8
+EPOCHS = 2
 CHECKPOINT_FOLDER = 'model'
 CHECKPOINT_NAME = 'seq.h5'
 TB_LOG_DIR = os.path.join(CHECKPOINT_FOLDER, 'tblogs')
@@ -92,8 +92,9 @@ def create_model(checkpoints_path):
 
     return model
 
-# print('Retrieving cache...')
-# sync_s3()
+print('Retrieving cache...')
+sync_s3()
+
 try: 
     with open(model_path_info(), 'r') as fh:
         initial_epoch = int(fh.readline());       
