@@ -68,7 +68,7 @@ jobs:
         cml-publish output/confusion_matrix.png --md >> report.md
         cml-send-comment --update report.md
 
-  run2:
+  train:
     timeout-minutes: 5000
     runs-on: [self-hosted,cml6]
     needs: deploy-runner
