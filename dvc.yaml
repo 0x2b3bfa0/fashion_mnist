@@ -1,5 +1,5 @@
 stages:
-  mystage:
+  train:
     cmd: python3 train.py
     deps:
     - train.py
@@ -8,3 +8,7 @@ stages:
         checkpoint: true
     - model/seq.h5.epoch: 
         checkpoint: true
+    live:
+      dvclive:
+        summary: true
+        html: true
