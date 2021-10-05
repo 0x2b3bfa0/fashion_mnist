@@ -61,8 +61,8 @@ jobs:
         AWS_DEFAULT_REGION: us-east-1
         AWS_EC2_METADATA_DISABLED: true
         #DVC_EXP_AUTO_PUSH: true
-        #DVC_EXP_GIT_REMOTE: origin
-        DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
+        DVC_EXP_GIT_REMOTE: origin
+        #DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
         DVC_EXP_AUTO_PUSH: true
       run: |
         git fetch --prune
