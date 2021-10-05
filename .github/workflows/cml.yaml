@@ -65,7 +65,7 @@ jobs:
         #DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
         DVC_EXP_AUTO_PUSH: true
       run: |
-        git fetch --prune
+        # git fetch --prune
 
         pip install -r requirements.txt
 
