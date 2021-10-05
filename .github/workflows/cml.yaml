@@ -73,7 +73,7 @@ jobs:
         git remote add origin "https://DavidGOrtega:${REPO_TOKEN}@github.com/DavidGOrtega/fashion_mnist.git"
         dvc pull --run-cache || echo 'Forgive this :pray:'
         dvc exp run --pull -v
-        dvc push --run-cache
+        # dvc push --run-cache
 
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md
