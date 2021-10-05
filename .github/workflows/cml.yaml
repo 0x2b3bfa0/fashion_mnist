@@ -77,7 +77,7 @@ jobs:
         # dvc exp run --pull -v
         # dvc push --run-cache
 
-        git fetch --prune
+        # git fetch --prune
         dvc pull || echo 'Forgive this :pray:'
         dvc exp run -v
 
