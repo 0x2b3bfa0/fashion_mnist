@@ -6,7 +6,9 @@ import numpy as np
 from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import dvclive
+from dvclive import Live
+
+dvclive = Live()
 
 print('Num GPUs Available: ', len(tf.config.list_physical_devices('GPU')))
 
