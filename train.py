@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 from dvclive import Live
 
-dvclive = Live()
+dvc_live = Live()
 
 print('Num GPUs Available: ', len(tf.config.list_physical_devices('GPU')))
 
@@ -135,9 +135,9 @@ def log_metrics(epoch, logs):
     with open(model_metrics(), 'w') as fh:
         fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(loss) + "\n")
 
-    dvclive.log('Accuracy', accuracy)
-    dvclive.log('Loss', loss)
-    dvclive.next_step()
+    dvc_live.log('Accuracy', accuracy)
+    dvc_live.log('Loss', loss)
+    dvc_live.next_step()
 
 def log_confusion_matrix(epoch, logs):
     test_pred = np.argmax(model.predict(test_images), axis=1)
