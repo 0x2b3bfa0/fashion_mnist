@@ -48,6 +48,8 @@ jobs:
     - uses: iterative/setup-cml@v1
 
     - uses: iterative/setup-dvc@v1
+      with:
+        version: '2.7.3'
 
     - uses: actions/setup-python@v2
       with:
@@ -65,6 +67,8 @@ jobs:
         DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
         DVC_EXP_AUTO_PUSH: true
       run: |
+        dvc version
+
         git fetch --prune
 
         pip install -r requirements.txt
@@ -79,19 +83,8 @@ jobs:
         # dvc exp run --pull -v
         # dvc push --run-cache
 
-        # dvc pull || echo 'Forgive this :pray:'
-        # dvc exp run -v
-
-        
-        EXP_NAME=${GITHUB_REPOSITORY}-cml-run-${GITHUB_SHA}
-        if [[ $(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null) ]]; then
-          # resuming
-          dvc exp apply $EXP_NAME
-          dvc exp run -v
-        else
-          # first time
-          dvc exp run -n $EXP_NAME
-        fi
+        dvc pull || echo 'Forgive this :pray:'
+        dvc exp run -v
 
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md
