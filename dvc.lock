@@ -1,0 +1,19 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: python3 train.py
+    deps:
+    - path: train.py
+      md5: c484df93ff7944b7d928acb33d9e2354
+      size: 5487
+    outs:
+    - path: dvclive
+      md5: eef9bdcd504a1d1ae747b4fb09dc2cbd.dir
+      size: 191
+      nfiles: 2
+    - path: model/seq.h5
+      md5: ea783d503edb5b105ab831e63c5e575f
+      size: 2967584
+    - path: model/seq.h5.epoch
+      md5: b026324c6904b2a9cb4b88d6d61c81d1
+      size: 2
