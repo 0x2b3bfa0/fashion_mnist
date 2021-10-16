@@ -83,10 +83,10 @@ jobs:
         # dvc exp run --pull -v
         # dvc push --run-cache
 
-        dvc pull || echo 'Forgive this :pray:'
-        dvc exp run -v
+        #dvc pull || echo 'Forgive this :pray:'
+        #dvc exp run -v
 
-        
+
         EXP_NAME=${GITHUB_REPOSITORY}-cml-run-${GITHUB_SHA}
         echo $EXP_NAME
         if [[ $(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null) ]]; then
