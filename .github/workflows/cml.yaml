@@ -83,20 +83,8 @@ jobs:
         # dvc exp run --pull -v
         # dvc push --run-cache
 
-        #dvc pull || echo 'Forgive this :pray:'
-        #dvc exp run -v
-
-
-        EXP_NAME=${GITHUB_REPOSITORY}-cml-run-${GITHUB_SHA}
-        echo $EXP_NAME
-        if [[ $(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null) ]]; then
-          echo "############\nResuming\n############"
-          dvc exp apply $EXP_NAME
-          dvc exp run -v
-        else
-          echo "############\nFirst Time\n############"
-          dvc exp run -n $EXP_NAME
-        fi
+        dvc pull || echo 'Forgive this :pray:'
+        dvc exp run -v
 
         echo "# CML report" > report.md
         cml-publish model/confusion_matrix.png --md >> report.md
