@@ -3,4 +3,4 @@ sklearn
 matplotlib
 idx2numpy
 h5py<3.0.0
-dvclive
+dvclive==0.2.3
