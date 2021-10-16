@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="5">
+    <title>DVC Plot</title>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.20.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.1.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.18.2"></script>
+</head>
+<body>
+    <table>
+<thead>
+<tr><th>dvclive.json                                                                      </th></tr>
+</thead>
+<tbody>
+<tr><td>{&#x27;data&#x27;: {&#x27;step&#x27;: 2, &#x27;Accuracy&#x27;: 0.8827999830245972, &#x27;Loss&#x27;: 0.28768017888069153}}</td></tr>
+</tbody>
+</table>
+<br>
+
+    <div id = "plot_dvclive_Loss_tsv">
+        <script type = "text/javascript">
+            var spec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {
+        "values": [
+    {
+        "Loss": "0.5677551627159119",
+        "rev": "workspace",
+        "step": "0",
+        "timestamp": "1634367713355"
+    },
+    {
+        "Loss": "0.323263555765152",
+        "rev": "workspace",
+        "step": "1",
+        "timestamp": "1634367766421"
+    },
+    {
+        "Loss": "0.28768017888069153",
+        "rev": "workspace",
+        "step": "2",
+        "timestamp": "1634367813185"
+    }
+]
+    },
+    "title": "",
+    "width": 300,
+    "height": 300,
+    "mark": {
+        "type": "line"
+    },
+    "encoding": {
+        "x": {
+            "field": "step",
+            "type": "quantitative",
+            "title": "step"
+        },
+        "y": {
+            "field": "Loss",
+            "type": "quantitative",
+            "title": "Loss",
+            "scale": {
+                "zero": false
+            }
+        },
+        "color": {
+            "field": "rev",
+            "type": "nominal"
+        }
+    }
+}
+;
+            vegaEmbed('#plot_dvclive_Loss_tsv', spec);
+        </script>
+    </div>
+    
+
+    <div id = "plot_dvclive_Accuracy_tsv">
+        <script type = "text/javascript">
+            var spec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+    "data": {
+        "values": [
+    {
+        "Accuracy": "0.8657000064849854",
+        "rev": "workspace",
+        "step": "0",
+        "timestamp": "1634367713349"
+    },
+    {
+        "Accuracy": "0.8515999913215637",
+        "rev": "workspace",
+        "step": "1",
+        "timestamp": "1634367766418"
+    },
+    {
+        "Accuracy": "0.8827999830245972",
+        "rev": "workspace",
+        "step": "2",
+        "timestamp": "1634367813179"
+    }
+]
+    },
+    "title": "",
+    "width": 300,
+    "height": 300,
+    "mark": {
+        "type": "line"
+    },
+    "encoding": {
+        "x": {
+            "field": "step",
+            "type": "quantitative",
+            "title": "step"
+        },
+        "y": {
+            "field": "Accuracy",
+            "type": "quantitative",
+            "title": "Accuracy",
+            "scale": {
+                "zero": false
+            }
+        },
+        "color": {
+            "field": "rev",
+            "type": "nominal"
+        }
+    }
+}
+;
+            vegaEmbed('#plot_dvclive_Accuracy_tsv', spec);
+        </script>
+    </div>
+    
+</body>
+</html>
