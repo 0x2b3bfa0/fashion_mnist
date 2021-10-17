@@ -80,17 +80,17 @@ jobs:
         DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
         DVC_EXP_AUTO_PUSH: true
       run: |
-        pip install -r requirements.txt || echo 'WTF'
+        pip install -r requirements.txt
 
         EXP_NAME=cml-run-${GITHUB_SHA}
-        echo $(dvc exp pull --run-cache origin $EXP_NAME)
-        if [[ $(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null) ]]; then
-          echo "############\nResuming\n############"
-          dvc exp apply $EXP_NAME
-          dvc exp run
-        else
-          echo "############\nFirst Time\n############"
-          dvc exp run -n $EXP_NAME
+        EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
+        if [[ -z "$EXP_AVAIL" ]]; then
+            echo "############\nFirst Time\n############"
+            dvc exp run -n $EXP_NAME --pull
+        else    
+            echo "############\nResuming\n############"
+            dvc exp apply $EXP_NAME
+            dvc exp run
         fi
 
         echo "# CML report" > report.md
