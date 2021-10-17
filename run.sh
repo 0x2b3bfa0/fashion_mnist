@@ -1,6 +1,9 @@
 #!/bin/bash
 
-EXP_NAME=cml-run-${GITHUB_SHA}
+git config --global user.email "g.ortega.david@gmail.com"
+git config --global user.name "DavidGOrtega"
+
+EXP_NAME=cml-run-${GITHUB_SHA}-2
 EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
 if [[ -z "$EXP_AVAIL" ]]; then
     echo "############\nFirst Time\n############"
