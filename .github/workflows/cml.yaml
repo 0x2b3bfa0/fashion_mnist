@@ -84,7 +84,7 @@ jobs:
 
         EXP_NAME=cml-run-${GITHUB_SHA}
         EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
-        if [ $EXP_AVAIL ] then
+        if [ -z "$EXP_AVAIL" ]; then
           echo "############\nResuming\n############"
           dvc exp apply $EXP_NAME
           dvc exp run
