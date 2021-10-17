@@ -97,7 +97,7 @@ def create_model(checkpoints_path):
     return model
 
 print('Retrieving cache...')
-sync_s3()
+#sync_s3()
 
 try: 
     with open(model_path_info(), 'r') as fh:
@@ -122,7 +122,7 @@ def save_model(epoch, logs):
     with open(model_path_info(), 'w') as outfile:
         outfile.write(str(epoch+1) + "\n")
 
-    sync_s3(push=True)
+    # sync_s3(push=True)
 
 def log_metrics(epoch, logs):
     print(epoch, logs)
