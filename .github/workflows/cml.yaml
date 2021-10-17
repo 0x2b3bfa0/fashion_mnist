@@ -79,14 +79,15 @@ jobs:
         git config --global user.name "DavidGOrtega"
 
         EXP_NAME=cml-run-${GITHUB_SHA}
+        # || because generates an error
         EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME || echo '')
         if [[ -z "$EXP_AVAIL" ]]; then
             echo "############\nFirst Time\n############"
-            dvc exp run -n $EXP_NAME --pull
+            dvc exp run -n $EXP_NAME --pull -v
         else    
             echo "############\nResuming\n############"
             dvc exp apply $EXP_NAME
-            dvc exp run
+            dvc exp run -v
         fi
 
         echo "# CML report" > report.md
