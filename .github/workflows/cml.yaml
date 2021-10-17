@@ -57,47 +57,43 @@ jobs:
       with:
         python-version: '3.6'
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      env:
-        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-east-1
-        AWS_EC2_METADATA_DISABLED: true
-        DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
-        DVC_EXP_AUTO_PUSH: true
-
-    # - name: cml
+    # - name: Setup tmate session
+    #   uses: mxschmitt/action-tmate@v3
     #   env:
     #     REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
     #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     #     AWS_DEFAULT_REGION: us-east-1
     #     AWS_EC2_METADATA_DISABLED: true
-    #     #DVC_EXP_AUTO_PUSH: true
-    #     #DVC_EXP_GIT_REMOTE: origin
     #     DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
     #     DVC_EXP_AUTO_PUSH: true
-    #   run: |
-    #     git fetch --prune
 
-    #     pip install -r requirements.txt
+    - name: cml
+      env:
+        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+        AWS_EC2_METADATA_DISABLED: true
+        #DVC_EXP_AUTO_PUSH: true
+        #DVC_EXP_GIT_REMOTE: origin
+        DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
+        DVC_EXP_AUTO_PUSH: true
+      run: |
+        pip install -r requirements.txt
 
-    #     # python train.py
+        EXP_NAME=cml-run-${GITHUB_SHA}
+        EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
+        if [[ $EXP_AVAIL ]]; then
+          echo "############\nResuming\n############"
+          dvc exp apply $EXP_NAME
+          dvc exp run
+        else
+          echo "############\nFirst Time\n############"
+          dvc exp run -n $EXP_NAME --pull
+        fi
 
-    #     # git config --global user.email "g.ortega.david@gmail.com"
-    #     # git config --global user.name "DavidGOrtega"
-    #     # git remote rm origin
-    #     # git remote add origin ""
-    #     # dvc pull --run-cache || echo 'Forgive this :pray:'
-    #     # dvc exp run --pull -v
-    #     # dvc push --run-cache
-
-    #     dvc pull || echo 'Forgive this :pray:'
-    #     dvc exp run -v
-
-    #     echo "# CML report" > report.md
-    #     cml-publish model/confusion_matrix.png --md >> report.md
-    #     cml-send-comment report.md 
-    #     cml-pr dvc.lock
+        echo "# CML report" > report.md
+        cml-publish model/confusion_matrix.png --md >> report.md
+        cml-send-comment report.md 
+        cml-pr dvc.lock
