@@ -82,18 +82,18 @@ jobs:
       run: |
         pip install -r requirements.txt || echo 'WTF'
 
-        # EXP_NAME=cml-run-${GITHUB_SHA}
-        # EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
-        # if [[ $EXP_AVAIL ]]; then
-        #   echo "############\nResuming\n############"
-        #   dvc exp apply $EXP_NAME
-        #   dvc exp run
-        # else
-        #   echo "############\nFirst Time\n############"
-        #   dvc exp run -n $EXP_NAME --pull
-        # fi
+        EXP_NAME=cml-run-${GITHUB_SHA}
+        EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
+        if [ $EXP_AVAIL ]; then
+          echo "############\nResuming\n############"
+          dvc exp apply $EXP_NAME
+          dvc exp run
+        else
+          echo "############\nFirst Time\n############"
+          dvc exp run -n $EXP_NAME --pull
+        fi
 
-        # echo "# CML report" > report.md
-        # cml-publish model/confusion_matrix.png --md >> report.md
-        # cml-send-comment report.md 
-        # cml-pr dvc.lock
+        echo "# CML report" > report.md
+        cml-publish model/confusion_matrix.png --md >> report.md
+        cml-send-comment report.md 
+        cml-pr dvc.lock
