@@ -80,7 +80,7 @@ jobs:
         DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
         DVC_EXP_AUTO_PUSH: true
       run: |
-        pip install -r requirements.txt
+        pip install -r requirements.txt || echo 'WTF'
 
         EXP_NAME=cml-run-${GITHUB_SHA}
         EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null)
