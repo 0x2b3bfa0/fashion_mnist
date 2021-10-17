@@ -57,17 +57,6 @@ jobs:
       with:
         python-version: '3.6'
 
-    # - name: Setup tmate session
-    #   uses: mxschmitt/action-tmate@v3
-    #   env:
-    #     REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     AWS_DEFAULT_REGION: us-east-1
-    #     AWS_EC2_METADATA_DISABLED: true
-    #     DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
-    #     DVC_EXP_AUTO_PUSH: true
-
     - name: cml
       env:
         REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
@@ -104,3 +93,15 @@ jobs:
         cml-publish model/confusion_matrix.png --md >> report.md
         cml-send-comment report.md 
         cml-pr dvc.lock
+
+    - name: Setup tmate session
+      if: ${{ failure() }}
+      uses: mxschmitt/action-tmate@v3
+      env:
+        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+        AWS_EC2_METADATA_DISABLED: true
+        DVC_EXP_GIT_REMOTE: https://DavidGOrtega:${{secrets.REPO_TOKEN}}@github.com/DavidGOrtega/fashion_mnist.git
+        DVC_EXP_AUTO_PUSH: true
