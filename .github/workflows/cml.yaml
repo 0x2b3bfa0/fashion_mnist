@@ -37,8 +37,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      # with:
-      #   fetch-depth: 0
+      with:
+        fetch-depth: 0
       env:
         token: ${{ secrets.REPO_TOKEN }}
 
@@ -82,15 +82,15 @@ jobs:
       shell: bash
       run: |
         pip install -r requirements.txt
-        git fetch --prune
+        
+        # git fetch --prune
 
         #needed by dvc exp apply
         git config --global user.email "g.ortega.david@gmail.com"
         git config --global user.name "DavidGOrtega"
 
         EXP_NAME=cml-run-${GITHUB_SHA}
-        EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME)
-        echo 'hereeeeeeeee'
+        (EXP_AVAIL=$(dvc exp pull --run-cache origin $EXP_NAME)) || echo 'failed here!!!'
         if [[ -z "$EXP_AVAIL" ]]; then
             echo "############\nFirst Time\n############"
             dvc exp run -n $EXP_NAME --pull
