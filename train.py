@@ -130,8 +130,8 @@ def log_metrics(epoch, logs):
     accuracy = logs.get('val_accuracy', logs.get('val_acc'))
     loss = logs['loss']
 
-    with open(model_metrics(), 'w') as fh:
-        fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(loss) + "\n")
+    #with open(model_metrics(), 'w') as fh:
+        #fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(loss) + "\n")
 
     dvclive.log('Accuracy', accuracy)
     dvclive.log('Loss', loss)
@@ -170,7 +170,7 @@ model.fit(train_images,
           verbose=0,
           callbacks=[
             tf.keras.callbacks.TensorBoard(log_dir=TB_LOG_DIR, histogram_freq=1),
-            #tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
+            tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
             #tf.keras.callbacks.LambdaCallback(on_epoch_end=log_confusion_matrix),
             tf.keras.callbacks.LambdaCallback(on_epoch_end=save_model)
           ],
