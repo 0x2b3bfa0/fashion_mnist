@@ -8,10 +8,6 @@ stages:
         checkpoint: true
     - model/seq.h5.epoch: 
         checkpoint: true
-    - model/confusion_matrix.png: 
-        checkpoint: true
-     - model/metrics.txt: 
-        checkpoint: true
     live:
       dvclive:
         summary: true

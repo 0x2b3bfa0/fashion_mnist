@@ -170,8 +170,8 @@ model.fit(train_images,
           verbose=0,
           callbacks=[
             tf.keras.callbacks.TensorBoard(log_dir=TB_LOG_DIR, histogram_freq=1),
-            tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
-            tf.keras.callbacks.LambdaCallback(on_epoch_end=log_confusion_matrix),
+            #tf.keras.callbacks.LambdaCallback(on_epoch_end=log_metrics),
+            #tf.keras.callbacks.LambdaCallback(on_epoch_end=log_confusion_matrix),
             tf.keras.callbacks.LambdaCallback(on_epoch_end=save_model)
           ],
           validation_data=(test_images, test_labels))
