@@ -83,6 +83,7 @@ jobs:
         pip install -r requirements.txt || echo 'WTF'
 
         EXP_NAME=cml-run-${GITHUB_SHA}
+        echo $(dvc exp pull --run-cache origin $EXP_NAME)
         if [[ $(dvc exp pull --run-cache origin $EXP_NAME &>/dev/null) ]]; then
           echo "############\nResuming\n############"
           dvc exp apply $EXP_NAME
