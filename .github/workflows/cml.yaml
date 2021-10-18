@@ -37,8 +37,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      # with:
+      #   fetch-depth: 0
       env:
         token: ${{ secrets.REPO_TOKEN }}
 
@@ -70,8 +70,6 @@ jobs:
         DVC_EXP_AUTO_PUSH: true
       shell: bash
       run: |
-        dvc doctor
-        
         pip install -r requirements.txt
         
         # git fetch --prune
