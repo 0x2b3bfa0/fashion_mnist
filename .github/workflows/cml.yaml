@@ -75,8 +75,8 @@ jobs:
         # git fetch --prune
 
         #needed by dvc exp apply
-        git config --global user.email "g.ortega.david@gmail.com"
-        git config --global user.name "DavidGOrtega"
+        # git config --global user.email "g.ortega.david@gmail.com"
+        # git config --global user.name "DavidGOrtega"
 
         EXP_NAME=cml-run-${GITHUB_SHA}
         # || because generates an error
