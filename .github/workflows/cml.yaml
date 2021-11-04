@@ -3,69 +3,26 @@ name: train-my-model
 on: [push]
 
 jobs:
-  deploy-runner:
-    env:
-      REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}
-
-      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-
-    runs-on: [ubuntu-latest]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: iterative/setup-cml@v1
-
-      - name: deploy
-        shell: bash
-        run: |
-          cml-runner \
-          --reuse \
-          --cloud-spot \
-          --cloud aws \
-          --cloud-type t2.medium \
-          --labels cml6
-
-  train:
-    timeout-minutes: 5000
-    runs-on: [self-hosted,cml6]
-    needs: deploy-runner
-    container: 
-      image: docker://dvcorg/cml:0-dvc2-base1
-
+  run:
+    runs-on: [self-hosted,cml-env]
     steps:
     - uses: actions/checkout@v2
+    - uses: iterative/setup-cml@v1
+    - uses: iterative/setup-dvc@v1
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.6'
 
     - name: cml
       env:
         REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-east-1
-        AWS_EC2_METADATA_DISABLED: true
-        TB_CREDENTIALS: ${{ secrets.TB_CREDENTIALS }}
+      shell: bash
       run: |
-        sudo apt update && sudo apt install awscli
-        
+        python --version
+        dvc --version
+
         pip install -r requirements.txt
-        
-        TB_URL="NOT READY"
-
+      
         echo "# CML report" > report.md
-        echo $TB_URL >> report.md
-        cml-send-comment --update report.md
-
-        python train.py
-        
-        echo "# CML report" > report.md
-        cml-pr --md output/* >> report.md
-        echo $TB_URL >> report.md
-        cat output/metrics.txt >> report.md
-        cml-publish output/confusion_matrix.png --md >> report.md
-        cml-send-comment --update report.md
-
-
+        cml-send-comment report.md 
+ 
