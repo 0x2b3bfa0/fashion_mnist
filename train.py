@@ -9,10 +9,10 @@ import tensorflow as tf
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-EPOCHS = 1
-CHECKPOINT_FOLDER = 'output'
-CHECKPOINT_NAME = 'seq.h5'
-TB_LOG_DIR = os.path.join(CHECKPOINT_FOLDER, 'tblogs')
+S3_BUCKET = os.getenv('S3_BUCKET', 's3://daviddvctest/cache') 
+EPOCHS = os.getenv('EPOCHS', 1) 
+CHECKPOINT_FOLDER = os.getenv('CHECKPOINT_FOLDER', 'output')
+TB_LOG_DIR = os.getenv('TB_LOG_DIR', os.path.join(CHECKPOINT_FOLDER, 'tblogs'))
 
 # Load the data.
 train_images = idx2numpy.convert_from_file("data/train-images-idx3-ubyte")
@@ -30,10 +30,6 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
 
 def sync_s3(push=False):
     print('Retrieving cache...')
-
-    S3_BUCKET = os.getenv('S3_BUCKET') 
-    if not S3_BUCKET:
-        raise Exception('S3_BUCKET enviroment variable must be set')
 
     s3_path = S3_BUCKET
 
@@ -58,7 +54,7 @@ def sync_s3(push=False):
     os.system(command)
 
 def model_path():
-    return os.path.join(CHECKPOINT_FOLDER, CHECKPOINT_NAME)
+    return os.path.join(CHECKPOINT_FOLDER, 'seq.h5')
 
 def model_path_info():
     return model_path() + '.epoch'

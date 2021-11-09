@@ -43,8 +43,9 @@ jobs:
         sudo apt update && sudo apt install awscli
         pip install -r requirements.txt
         
+        export TB_LOG_DIR=output/tblogs
         TB_URL=TB_URL=$(cml-tensorboard-dev --md \
-          --logdir output/tblogs \
+          --logdir $TB_LOG_DIR \
           --name "Go to tensorboard")
 
         echo "# CML report" > report.md
