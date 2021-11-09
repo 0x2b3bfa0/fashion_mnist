@@ -47,7 +47,7 @@ jobs:
         AWS_EC2_METADATA_DISABLED: true
         TB_CREDENTIALS: ${{ secrets.TB_CREDENTIALS }}
       run: |
-        npm install -g https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
+        npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
 
         sudo apt update && sudo apt install awscli
         pip install -r requirements.txt

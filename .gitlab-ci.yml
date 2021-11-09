@@ -22,8 +22,8 @@ train:
     - cml-runner-gl
   image: dvcorg/cml:0-dvc2-base1
   script:
-    - npm install -g https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
-    
+    - npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
+
     - sudo apt update && sudo apt install awscli   
     - pip install -r requirements.txt
     
