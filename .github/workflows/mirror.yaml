@@ -20,4 +20,4 @@ jobs:
         with:
           REMOTE: 'https://DavidOrtega@bitbucket.org/DavidOrtega/fashion-mnist.git'
           GIT_USERNAME: davidortega
-          GIT_PASSWORD: ${{ secrets.BB_TOKEN }}
+          GIT_PASSWORD: ${{ secrets.BB_PASSWORD }}
