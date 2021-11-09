@@ -38,5 +38,5 @@ train:
     - cat output/metrics.txt >> report.md
     - cml-publish output/confusion_matrix.png --md >> report.md
     - cml-pr --md output/* >> report.md
-    - cml-send-comment --update report.md
+    - cml-send-comment report.md
     - cml-send-comment --update --pr --commit-sha HEAD report.md
