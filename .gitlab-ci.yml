@@ -2,31 +2,27 @@ stages:
   - deploy
   - run
 
-deploy_job:
+deploy_runner:
   stage: deploy
   when: always
   image: dvcorg/cml:0-dvc2-base1
   script:
     - cml-runner  
+      --reuse
       --cloud-spot 
       --cloud aws  
       --cloud-region us-west  
       --cloud-type t2.medium 
       --labels=cml-runner-gl
       
-
-run:
-  # timeout: 2 minutes
+train: 
   stage: run
   when: on_success
   tags:
-    - cml-runner-gl-local
+    - cml-runner-gl
   image: dvcorg/cml:0-dvc2-base1
   script:
-    - sudo npm install git://github.com/iterative/cml.git#spot-not-terminating
-
-    - sudo apt update && sudo apt install awscli
-        
+    - sudo apt update && sudo apt install awscli   
     - pip install -r requirements.txt
     
     - TB_URL="NOT READY"
@@ -38,8 +34,9 @@ run:
     - python train.py
     
     - echo "# CML report" > report.md
-    - cml-pr --md output/* >> report.md
     - echo $TB_URL >> report.md
     - cat output/metrics.txt >> report.md
     - cml-publish output/confusion_matrix.png --md >> report.md
-    - cml-send-comment report.md
+    - cml-pr --md output/* >> report.md
+    - cml-send-comment --update report.md
+    - cml-send-comment --update --pr --commit-sha HEAD report.md

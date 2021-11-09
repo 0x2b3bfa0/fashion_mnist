@@ -9,8 +9,6 @@ import tensorflow as tf
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-S3_BUCKET = 'daviddvctest/mycache'
-
 EPOCHS = 1
 CHECKPOINT_FOLDER = 'output'
 CHECKPOINT_NAME = 'seq.h5'
@@ -19,7 +17,6 @@ TB_LOG_DIR = os.path.join(CHECKPOINT_FOLDER, 'tblogs')
 # Load the data.
 train_images = idx2numpy.convert_from_file("data/train-images-idx3-ubyte")
 train_labels = idx2numpy.convert_from_file("data/train-labels-idx1-ubyte")
-
 test_images = idx2numpy.convert_from_file("data/t10k-images-idx3-ubyte")
 test_labels = idx2numpy.convert_from_file("data/t10k-labels-idx1-ubyte")
 
@@ -32,7 +29,13 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
 def sync_s3(push=False):
-    s3_path = os.path.join('s3://', S3_BUCKET)
+    print('Retrieving cache...')
+
+    S3_BUCKET = os.getenv('S3_BUCKET') 
+    if not S3_BUCKET:
+        raise Exception('S3_BUCKET enviroment variable must be set')
+
+    s3_path = S3_BUCKET
 
     if os.environ.get('CI', False):
         repo = os.environ.get('GITHUB_REPOSITORY', False)
@@ -46,11 +49,11 @@ def sync_s3(push=False):
             repo = os.environ.get('BITBUCKET_REPO_FULL_NAME', False)
             run_id = os.environ.get('BITBUCKET_BUILD_NUMBER')  
  
-        s3_path = os.path.join(s3_path, repo, run_id)
+        s3_path = os.path.join(S3_BUCKET, repo, run_id)
 
-    command = 'aws s3 sync ' + s3_path + ' ' + CHECKPOINT_FOLDER
+    command = f'aws s3 sync {s3_path} {CHECKPOINT_FOLDER}'
     if push:
-        command = 'aws s3 sync ' + CHECKPOINT_FOLDER + ' ' + s3_path
+        command = f'aws s3 sync {CHECKPOINT_FOLDER} {s3_path}'
             
     os.system(command)
 
@@ -91,30 +94,29 @@ def create_model(checkpoints_path):
 
     return model
 
-print('Retrieving cache...')
 sync_s3()
+
 try: 
     with open(model_path_info(), 'r') as fh:
         initial_epoch = int(fh.readline());       
 except:
     initial_epoch = 0
 
-if (initial_epoch > 0 and initial_epoch == EPOCHS):
+if (initial_epoch == EPOCHS):
     print('Nothing to do. Model is already trained')
     exit()
 
 model = create_model(model_path());
 
 def save_model(epoch, logs):
-    print("saving epoch:" + str(epoch))
+    print(f'Saving epoch: {str(epoch)}')
 
-    if not os.path.exists(CHECKPOINT_FOLDER):
-        os.makedirs(CHECKPOINT_FOLDER)
+    os.makedirs(CHECKPOINT_FOLDER, exist_ok=True)
 
     model.save(model_path())
 
-    with open(model_path_info(), 'w') as outfile:
-        outfile.write(str(epoch+1) + "\n")
+    with open(model_path_info(), 'w') as fh:
+        fh.write(f'{str(epoch+1)}\n')
 
     sync_s3(push=True)
 
@@ -122,8 +124,9 @@ def log_metrics(epoch, logs):
     print(epoch, logs)
 
     with open(model_metrics(), 'w') as fh:
-        accuracy = logs.get('val_accuracy', logs.get('val_acc'))
-        fh.write("Accuracy: " + str(accuracy) + "\n" + "Loss: " + str(logs['loss']) + "\n")
+        accuracy = logs.get('accuracy')
+        loss = logs.get('loss')
+        fh.write(f'Accuracy: {str(accuracy)}\nLoss: {str(loss)}\n')
 
 def log_confusion_matrix(epoch, logs):
     test_pred = np.argmax(model.predict(test_images), axis=1)
@@ -147,7 +150,7 @@ def log_confusion_matrix(epoch, logs):
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
-    plt.title('Epoch ' + str(epoch))
+    plt.title(f'Epoch {str(epoch)}')
 
     plt.savefig(model_cmatrix())
 
@@ -163,4 +166,3 @@ model.fit(train_images,
             tf.keras.callbacks.LambdaCallback(on_epoch_end=save_model)
           ],
           validation_data=(test_images, test_labels))
-

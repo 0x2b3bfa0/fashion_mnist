@@ -5,7 +5,6 @@ pipelines:
     - step:
         script:
           - sudo apt update && sudo apt install awscli
-        
           - pip install -r requirements.txt
           
           - TB_URL="NOT READY"
@@ -17,8 +16,9 @@ pipelines:
           - python train.py
           
           - echo "# CML report" > report.md
-          - cml-pr --md output/* >> report.md
           - echo $TB_URL >> report.md
           - cat output/metrics.txt >> report.md
           - cml-publish output/confusion_matrix.png --md >> report.md
-          - cml-send-comment report.md
+          - cml-pr --md output/* >> report.md
+          - cml-send-comment --update report.md
+          - cml-send-comment --update --pr --commit-sha HEAD report.md
