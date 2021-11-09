@@ -19,5 +19,5 @@ jobs:
       - uses: spyoungtech/mirror-action@master
         with:
           REMOTE: 'https://DavidOrtega@bitbucket.org/DavidOrtega/fashion-mnist.git'
-          GIT_USERNAME: DavidOrtega
+          GIT_USERNAME: davidortega
           GIT_PASSWORD: ${{ secrets.BB_TOKEN }}
