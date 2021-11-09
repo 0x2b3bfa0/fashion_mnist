@@ -51,7 +51,7 @@ jobs:
         pip install -r requirements.txt
         
         export TB_LOG_DIR=output/tblogs
-        mkdir -R $TB_LOG_DIR
+        mkdir -p $TB_LOG_DIR
         TB_URL=$(cml-tensorboard-dev --md \
           --logdir $TB_LOG_DIR \
           --name "Go to tensorboard")
