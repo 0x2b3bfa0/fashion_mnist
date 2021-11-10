@@ -13,7 +13,7 @@ deploy_runner:
       --cloud aws  
       --cloud-region us-west  
       --cloud-type t2.medium 
-      --labels=cml-runner-gl
+      --labels=cml
       
 train: 
   stage: run
