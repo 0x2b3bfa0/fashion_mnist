@@ -19,7 +19,7 @@ train:
   stage: run
   when: on_success
   tags:
-    - cml-runner-gl
+    - cml
   image: dvcorg/cml:0-dvc2-base1
   script:
     - npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
