@@ -31,7 +31,7 @@ train:
 
     - echo "# CML report" > report.md
     - echo $TB_URL >> report.md
-    - cml-send-comment report.md
+    - cml-send-comment --update report.md
 
     - python train.py
     
