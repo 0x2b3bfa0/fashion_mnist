@@ -30,7 +30,7 @@ jobs:
 
         resource "xpd_task" "task" {
           cloud   = "aws"
-          machine = t2.medium
+          machine = "t2.medium"
           spot    = 0
           name    = var.name
 
@@ -57,4 +57,4 @@ jobs:
         NAME=$GITHUB_REPOSITORY-$GITHUB_RUN_ID
         echo $NAME
         terraform init 
-        terraform apply --auto-approve -var 'name=${NAMEX}'
+        terraform apply --auto-approve -var "name=${NAME}"
