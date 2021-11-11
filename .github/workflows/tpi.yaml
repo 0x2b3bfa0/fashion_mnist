@@ -56,14 +56,9 @@ jobs:
             sudo apt update && sudo apt-get install -y nodejs 
             sudo npm install -g --unsafe @dvcorg/cml
 
+            export REPO_TOKEN=$REPO_TOKEN
             pip3 install -r requirements.txt
             python3 train.py
-            
-            echo "# CML report" > report.md
-            echo ":wave: from TPI" >> report.md
-            cat output/metrics.json >> report.md
-            cml-publish output/confusion_matrix.png --md >> report.md
-            cml-send-comment --token $REPO_TOKEN report.md
           END
         }
         EOF
