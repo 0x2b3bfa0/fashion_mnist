@@ -38,7 +38,7 @@ jobs:
           spot      = 0
           name      = var.name
           directory = "."
-          image     = "ubuntu@*iterative-cml*"
+          image     = "ubuntu@*iterative*"
 
           script = <<-END
             #!/bin/bash
