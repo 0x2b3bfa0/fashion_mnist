@@ -47,10 +47,10 @@ jobs:
             git config --global user.email g.ortega.david@gmail.com
             npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
 
-            apt update && sudo apt install awscli
+            apt update --yes && apt install --yes awscli python3-pip
             pip3 install -r requirements.txt
 
-            python train.py
+            python3 train.py
             
             echo "# CML report" > report.md
             cat output/metrics.json >> report.md
