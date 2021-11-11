@@ -54,7 +54,7 @@ jobs:
 
             curl -sL https://deb.nodesource.com/setup_12.x | sudo bash
             sudo apt update && sudo apt-get install -y nodejs 
-            sudo npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
+            sudo npm install -g https://github.com/iterative/cml.git#cml-send-comment-pr-rev-parse
 
             pip3 install -r requirements.txt
             python3 train.py
