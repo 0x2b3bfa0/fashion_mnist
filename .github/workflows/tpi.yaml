@@ -38,18 +38,25 @@ jobs:
           spot      = 0
           name      = var.name
           directory = "."
-          image     = "ubuntu@x86_64:*:iterative-cml"
           region    = "us-west"
 
           script = <<-END
             #!/bin/bash
-            git config --global user.name DavidGOrtega
-            git config --global user.email g.ortega.david@gmail.com
-            npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
 
-            apt update --yes && apt install --yes awscli python3-pip
+            echo "APT::Get::Assume-Yes \"true\";" | sudo tee -a /etc/apt/apt.conf.d/90assumeyes
+
+            sudo apt remove unattended-upgrades
+            systemctl disable apt-daily-upgrade.service
+
+            sudo add-apt-repository universe -y
+            sudo add-apt-repository ppa:git-core/ppa -y
+            sudo apt update && sudo apt-get install -y software-properties-common build-essential git awscli python3-pip
+
+            curl -sL https://deb.nodesource.com/setup_12.x | sudo bash
+            sudo apt update && sudo apt-get install -y nodejs 
+            sudo npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
+
             pip3 install -r requirements.txt
-
             python3 train.py
             
             echo "# CML report" > report.md
