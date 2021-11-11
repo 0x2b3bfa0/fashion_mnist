@@ -38,6 +38,7 @@ jobs:
           spot      = 0
           name      = var.name
           directory = "."
+          image     = "iterative-cml"
 
           script = <<-END
             #!/bin/bash
