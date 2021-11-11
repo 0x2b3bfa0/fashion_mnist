@@ -10,7 +10,7 @@ import tensorflow as tf
 
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
-S3_BUCKET = os.getenv('S3_BUCKET', 's3://daviddvctest/cache') 
+S3_BUCKET = os.getenv('S3_BUCKET', 's3://daviddvctest/cache3') 
 EPOCHS = os.getenv('EPOCHS', 1) 
 CHECKPOINT_FOLDER = os.getenv('CHECKPOINT_FOLDER', 'output')
 TB_LOG_DIR = os.getenv('TB_LOG_DIR', os.path.join(CHECKPOINT_FOLDER, 'tblogs'))
@@ -127,7 +127,7 @@ def log_metrics(epoch, logs):
         }, fh)
 
 
-    os.system('echo "# CML report\N:wave: from TPI" > report.md && cat output/metrics.json >> report.md && cml-publish output/confusion_matrix.png --md >> report.md && cml-send-comment --token ' + os.environ.get('REPO_TOKEN') + ' report.md')
+    os.system('echo "# CML report\n:wave: from TPI" > report.md && cat output/metrics.json >> report.md && cml-publish output/confusion_matrix.png --md >> report.md && cml-send-comment --token ' + os.environ.get('REPO_TOKEN') + ' report.md')
 
 
 def log_confusion_matrix(epoch, logs):
