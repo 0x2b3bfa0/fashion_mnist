@@ -17,12 +17,12 @@ jobs:
         shell: bash
         run: |
           cml-runner \
-          --reuse \
-          --cloud-spot \
-          --cloud aws \ 
-          --cloud-region us-west \
-          --cloud-type t2.medium \
-          --labels cml
+            --reuse \
+            --cloud-spot \
+            --cloud aws \
+            --cloud-region us-west \
+            --cloud-type t2.medium \
+            --labels cml
 
   train:
     timeout-minutes: 5000

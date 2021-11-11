@@ -27,31 +27,7 @@ jobs:
 
         provider "xpd" {}
         variable "name" {}
-
-        resource "xpd_task" "task" {
-          cloud = "aws"
-          name  = var.name
-
-          directory = "${path.root}"
-
-          script = <<-END
-            #!/bin/bash
-            npm install -g --unsafe https://github.com/iterative/cml#cml-send-comment-pr-rev-parse
-
-            sudo apt update && sudo apt install awscli
-            pip install -r requirements.txt
-
-            python train.py
-            
-            echo "# CML report" > report.md
-            echo $TB_URL >> report.md
-            cat output/metrics.txt >> report.md
-            cml-publish output/confusion_matrix.png --md >> report.md
-            cml-pr --md output/* >> report.md
-            cml-send-comment --update report.md
-            cml-send-comment --update --pr --commit-sha HEAD report.md
-          END
-        }
+        
         EOF
 
         NAME=$GITHUB_REPOSITORY-$GITHUB_RUN_ID
