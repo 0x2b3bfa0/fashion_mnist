@@ -1,5 +1,6 @@
 import os
 import itertools
+import json
 
 import idx2numpy
 import numpy as np
@@ -60,7 +61,7 @@ def model_path_info():
     return model_path() + '.epoch'
 
 def model_metrics():
-    return os.path.join(CHECKPOINT_FOLDER, 'metrics.txt')
+    return os.path.join(CHECKPOINT_FOLDER, 'metrics.json')
 
 def model_cmatrix():
     return os.path.join(CHECKPOINT_FOLDER, 'confusion_matrix.png')
@@ -120,9 +121,10 @@ def log_metrics(epoch, logs):
     print(epoch, logs)
 
     with open(model_metrics(), 'w') as fh:
-        accuracy = logs.get('accuracy')
-        loss = logs.get('loss')
-        fh.write(f'Accuracy: {str(accuracy)}\nLoss: {str(loss)}\n')
+        json.dump({ 
+            'accuracy': logs.get('accuracy'), 
+            'loss': logs.get('loss')
+        }, fh)
 
 def log_confusion_matrix(epoch, logs):
     test_pred = np.argmax(model.predict(test_images), axis=1)
