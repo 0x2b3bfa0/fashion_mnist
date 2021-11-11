@@ -29,9 +29,10 @@ jobs:
         variable "name" {}
 
         resource "xpd_task" "task" {
-          cloud = "aws"
-          type  = t2.micro
-          name  = var.name
+          cloud   = "aws"
+          machine = t2.medium
+          spot    = 0
+          name    = var.name
 
           script = <<-END
             #!/bin/bash
