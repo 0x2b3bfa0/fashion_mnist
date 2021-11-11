@@ -16,6 +16,10 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
+        NAME=$GITHUB_REPOSITORY-$GITHUB_RUN_ID
+        echo $NAME
+        ls
+
         cat <<EOF > main.tf
         terraform {
           required_providers {
@@ -54,7 +58,5 @@ jobs:
         }
         EOF
 
-        NAME=$GITHUB_REPOSITORY-$GITHUB_RUN_ID
-        echo $NAME
         terraform init 
         terraform apply --auto-approve -var "name=${NAME}"
