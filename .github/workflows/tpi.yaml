@@ -38,7 +38,8 @@ jobs:
           spot      = 0
           name      = var.name
           directory = "."
-          #image     = "ubuntu@*iterative*"
+          image     = "ubuntu@*iterative*"
+          region    = "us-west"
 
           script = <<-END
             #!/bin/bash
