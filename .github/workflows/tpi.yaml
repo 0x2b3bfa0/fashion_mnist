@@ -54,4 +54,4 @@ jobs:
 
         NAME=$GITHUB_REPOSITORY-$GITHUB_RUN_ID
         terraform init 
-        terraform apply --auto-approve -var 'name=$NAME'
+        terraform apply --auto-approve -var 'name=${NAME}'
