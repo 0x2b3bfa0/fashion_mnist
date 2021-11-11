@@ -2,7 +2,8 @@ name: train-tpi
 
 on: [push]
 
-  train:
+jobs:
+  train-tpi:
     timeout-minutes: 5000
     runs-on: [ubuntu-latest]
 
