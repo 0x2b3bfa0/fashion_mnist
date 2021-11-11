@@ -54,17 +54,17 @@ jobs:
 
             curl -sL https://deb.nodesource.com/setup_12.x | sudo bash
             sudo apt update && sudo apt-get install -y nodejs 
-            sudo npm install -g https://github.com/iterative/cml.git
+            sudo npm -g install @dvcorg/cml
 
             pip3 install -r requirements.txt
             python3 train.py
             
             echo "# CML report" > report.md
+            echo ":wave: from TPI" >> report.md
             cat output/metrics.json >> report.md
             cml-publish output/confusion_matrix.png --md >> report.md
             cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
-            cml-send-comment --update --pr --commit-sha HEAD report.md
           END
         }
         EOF
