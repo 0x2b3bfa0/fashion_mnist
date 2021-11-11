@@ -57,6 +57,7 @@ jobs:
             sudo npm install -g --unsafe @dvcorg/cml
 
             export REPO_TOKEN=$REPO_TOKEN
+            export S3_BUCKET=$NAME
             pip3 install -r requirements.txt
             python3 train.py
           END
