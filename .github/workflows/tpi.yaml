@@ -63,8 +63,7 @@ jobs:
             echo ":wave: from TPI" >> report.md
             cat output/metrics.json >> report.md
             cml-publish output/confusion_matrix.png --md >> report.md
-            cml-pr --md output/* >> report.md
-            cml-send-comment --update report.md
+            cml-send-comment --token $REPO_TOKEN report.md
           END
         }
         EOF
