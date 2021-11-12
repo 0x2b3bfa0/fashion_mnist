@@ -30,8 +30,6 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 
 def sync_s3(push=False):
-    print('Retrieving cache...')
-
     s3_path = S3_BUCKET
 
     if os.environ.get('CI', False):
@@ -48,6 +46,8 @@ def sync_s3(push=False):
  
         s3_path = os.path.join(S3_BUCKET, repo, run_id)
 
+    print('Syncing cache at %s' % s3_path)
+    
     command = f'aws s3 sync {s3_path} {CHECKPOINT_FOLDER}'
     if push:
         command = f'aws s3 sync {CHECKPOINT_FOLDER} {s3_path}'
