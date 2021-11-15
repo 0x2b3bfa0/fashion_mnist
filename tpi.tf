@@ -9,6 +9,7 @@ terraform {
 provider "xpd" {}
 
 variable "name" {}
+variable "done" {}
 variable "repo_token" {}
 
 resource "xpd_task" "task" {
@@ -17,6 +18,7 @@ resource "xpd_task" "task" {
   directory = "."
 
   environment = {
+    DONE = var.done
     REPO_TOKEN = var.repo_token,
   }
 
@@ -41,5 +43,7 @@ resource "xpd_task" "task" {
 
     date > file
     cml pr file 
+    
+    echo "$DONE"
   END
 }
