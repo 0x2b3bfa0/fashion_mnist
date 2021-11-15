@@ -103,6 +103,9 @@ jobs:
 
           script = <<-END
             #!/bin/bash
+            sudo git config --global user.name "DavidGOrtega"
+            sudo git config --global user.email "g.ortega.david@gmail.com"
+            sudo git remote set-url origin https://DavidGOrtega:$REPO_TOKEN@github.com/DavidGOrtega/fashion_mnist
 
             echo "APT::Get::Assume-Yes \"true\";" | sudo tee -a /etc/apt/apt.conf.d/90assumeyes
 
@@ -129,10 +132,6 @@ jobs:
             export EPOCHS=4
             pip3 install -r requirements.txt
             python3 train.py
-
-            git config --global user.name "DavidGOrtega"
-            git config --global user.email "g.ortega.david@gmail.com"
-            git remote set-url origin https://DavidGOrtega:$REPO_TOKEN@github.com/DavidGOrtega/fashion_mnist
 
             cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
