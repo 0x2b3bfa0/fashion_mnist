@@ -126,8 +126,8 @@ jobs:
             pip3 install -r requirements.txt
             python3 train.py
 
-            git config user.name "DavidGOrtega"
-            git config user.email "g.ortega.david@gmail.com"
+            git config --global user.name "DavidGOrtega"
+            git config --global user.email "g.ortega.david@gmail.com"
             cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
             cml-send-comment --update --pr --commit-sha HEAD report.md
