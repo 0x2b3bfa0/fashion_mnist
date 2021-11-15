@@ -126,9 +126,13 @@ def log_metrics(epoch, logs):
             'loss': logs.get('loss')
         }, fh)
 
-
-    os.system('echo "# CML report\n:wave: from TPI" > report.md && cat output/metrics.json >> report.md && cml-publish output/confusion_matrix.png --md >> report.md && cml-send-comment --token ' + os.environ.get('REPO_TOKEN') + ' report.md')
-
+    command = """
+        echo "# CML report\n:wave: from TPI\n Epoch: %s" > report.md 
+        cat output/metrics.json >> report.md 
+        cml-publish output/confusion_matrix.png --md >> report.md
+        cml-send-comment --token %s report.md""" % (epoch, os.environ.get('REPO_TOKEN'))
+    
+    os.system(command)
 
 def log_confusion_matrix(epoch, logs):
     test_pred = np.argmax(model.predict(test_images), axis=1)
