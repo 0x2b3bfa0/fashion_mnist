@@ -44,6 +44,6 @@ resource "xpd_task" "task" {
     date > file
     cml pr file 
     
-    echo "$DONE"
+    echo "DONE:$DONE"
   END
 }
