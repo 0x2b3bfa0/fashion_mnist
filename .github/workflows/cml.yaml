@@ -103,8 +103,6 @@ jobs:
 
           script = <<-END
             #!/bin/bash
-            export HOME=~
-
             echo "APT::Get::Assume-Yes \"true\";" | sudo tee -a /etc/apt/apt.conf.d/90assumeyes
 
             sudo apt remove unattended-upgrades
@@ -125,9 +123,11 @@ jobs:
             sudo apt update && sudo apt-get install -y nodejs 
             sudo npm install -g --unsafe @dvcorg/cml
 
+            export HOME=$PWD
             export REPO_TOKEN=$REPO_TOKEN
             export S3_BUCKET=s3://daviddvctest/$NAME
             export EPOCHS=1
+
             pip3 install -r requirements.txt
             python3 train.py
 
