@@ -28,18 +28,13 @@ resource "xpd_task" "task" {
 
     curl --silent --location https://deb.nodesource.com/setup_14.x | bash
     apt update
-    apt install --yes build-essential git nodejs python3-pip
+    apt install --yes build-essential git nodejs
     npm install --global --unsafe @dvcorg/cml
 
     AUTHORIZATION="$(printf "x-access-token:$REPO_TOKEN" | base64)"
     git config --unset http.https://github.com/.extraheader
     git config --add http.https://github.com/.extraheader \
       "AUTHORIZATION: basic $AUTHORIZATION"
-
-    # export EPOCHS=1
-    # export S3_BUCKET=s3://daviddvctest/$NAME
-    # pip3 install --requirement requirements.txt
-    # python3 train.py
 
     date > file
     cml pr file 
