@@ -130,7 +130,7 @@ def log_metrics(epoch, logs):
         echo "# CML report\n:wave: from TPI\n Epoch: %s" > report.md 
         cat output/metrics.json >> report.md 
         cml-publish output/confusion_matrix.png --md >> report.md
-        cml-send-comment --token %s report.md""" % (epoch, os.environ.get('REPO_TOKEN'))
+        cml-send-comment --token %s --update report.md""" % (epoch, os.environ.get('REPO_TOKEN'))
     
     os.system(command)
 
