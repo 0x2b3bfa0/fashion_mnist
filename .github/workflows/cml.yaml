@@ -131,9 +131,13 @@ jobs:
             pip3 install -r requirements.txt
             python3 train.py
 
+            echo 'fetching'
+            git fetch --all
+            echo 'fetching ends'
+
             SHA="$(git log -n1 --format=%h)"
             BASE="$(git branch)"
-            git checkout -b "${BASE}-cml-prrrr-${SHA}"
+            git checkout -b "cml-prrrr"
             git add "output/*"
             git commit -m "CML PR for ${SHA} [skip ci]"
             git push
