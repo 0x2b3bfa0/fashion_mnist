@@ -7,10 +7,18 @@ jobs:
       with:
         fetch-depth: 0
     - run: |
+        export TF_VAR_done="$(uuidgen)"
+        
         terraform init
         terraform apply --auto-approve
-        terraform refresh
-        terraform show          
+        terraform refresh && terraform show
+        
+        while sleep 10; do
+          terraform refresh && terraform show --json |
+            grep --fixed-strings "$TF_VAR_done" && break
+        done
+        
+        terraform destroy --auto-approve
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
