@@ -113,9 +113,9 @@ jobs:
             sudo apt update && sudo apt-get install -y software-properties-common build-essential git awscli python3-pip
 
             git --version
-            sudo git config --global user.name "DavidGOrtega"
-            sudo git config --global user.email "g.ortega.david@gmail.com"
-            sudo git remote set-url origin https://DavidGOrtega:$REPO_TOKEN@github.com/DavidGOrtega/fashion_mnist 
+            git config --global user.name "DavidGOrtega"
+            git config --global user.email "g.ortega.david@gmail.com"
+            git remote set-url origin https://DavidGOrtega:$REPO_TOKEN@github.com/DavidGOrtega/fashion_mnist 
 
             curl --location https://apt.releases.hashicorp.com/gpg | sudo apt-key add - \
               && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release --codename --short) main" \
@@ -134,7 +134,7 @@ jobs:
             pip3 install -r requirements.txt
             python3 train.py
 
-            sudo --preserve-env cml-pr --md output/* >> report.md
+            cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
             cml-send-comment --update --pr --commit-sha HEAD report.md
 
