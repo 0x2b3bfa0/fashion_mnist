@@ -44,6 +44,9 @@ resource "xpd_task" "task" {
     date > file
     cml pr file 
     
+    touch /tmp/a
+    while test -f /tmp/a; do sleep 1; done
+    
     echo "DONE:$DONE"
   END
 }
