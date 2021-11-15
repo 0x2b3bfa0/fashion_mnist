@@ -131,12 +131,12 @@ jobs:
             pip3 install -r requirements.txt
             python3 train.py
 
-            cml-pr --md output/* >> report.md
+            sudo cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
             cml-send-comment --update --pr --commit-sha HEAD report.md
 
-            terraform init
-            terraform destroy -var "name=${NAME}" --auto-approve
+            sudo terraform init
+            sudo terraform destroy -var "name=${NAME}" --auto-approve
           END
         }
         EOF
