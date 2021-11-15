@@ -103,6 +103,8 @@ jobs:
 
           script = <<-END
             #!/bin/bash
+            export HOME=~
+
             echo "APT::Get::Assume-Yes \"true\";" | sudo tee -a /etc/apt/apt.conf.d/90assumeyes
 
             sudo apt remove unattended-upgrades
@@ -111,11 +113,6 @@ jobs:
             sudo add-apt-repository universe -y
             sudo add-apt-repository ppa:git-core/ppa -y
             sudo apt update && sudo apt-get install -y software-properties-common build-essential git awscli python3-pip
-
-            git --version
-            git config --global user.name "DavidGOrtega"
-            git config --global user.email "g.ortega.david@gmail.com"
-            git remote set-url origin https://DavidGOrtega:$REPO_TOKEN@github.com/DavidGOrtega/fashion_mnist 
 
             curl --location https://apt.releases.hashicorp.com/gpg | sudo apt-key add - \
               && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release --codename --short) main" \
