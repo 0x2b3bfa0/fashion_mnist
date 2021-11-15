@@ -112,6 +112,8 @@ jobs:
             sudo add-apt-repository ppa:git-core/ppa -y
             sudo apt update && sudo apt-get install -y software-properties-common build-essential git awscli python3-pip
 
+            git --version 
+
             curl --location https://apt.releases.hashicorp.com/gpg | sudo apt-key add - \
               && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release --codename --short) main" \
               && apt update \
@@ -133,6 +135,7 @@ jobs:
             cml-send-comment --update report.md
             cml-send-comment --update --pr --commit-sha HEAD report.md
 
+            terraform init
             terraform destroy -var "name=${NAME}" --auto-approve
           END
         }
