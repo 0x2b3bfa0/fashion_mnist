@@ -15,7 +15,7 @@ jobs:
         
         while sleep 10; do
           terraform refresh && terraform show --json |
-            grep --fixed-strings "$TF_VAR_done" && break
+            grep --fixed-strings "DONE:$TF_VAR_done" && break
         done
         
         terraform destroy --auto-approve
