@@ -67,4 +67,4 @@ jobs:
 
         terraform init 
         terraform apply --auto-approve -var "name=${NAME}"
-        terraform show
+        terraform refresh && terraform show
