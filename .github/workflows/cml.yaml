@@ -17,7 +17,7 @@ jobs:
           terraform refresh && terraform show --json |
             grep --fixed-strings "DONE:$TF_VAR_done" && break
         done
-        sleep 3600
+
         terraform destroy --auto-approve
       env:
         TF_VAR_name: ${{ github.run_id }}
