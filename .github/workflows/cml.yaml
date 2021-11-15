@@ -122,6 +122,8 @@ jobs:
             cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
             cml-send-comment --update --pr --commit-sha HEAD report.md
+
+            terraform destroy --auto-approve
           END
         }
         EOF
