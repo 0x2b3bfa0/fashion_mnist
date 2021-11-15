@@ -1,157 +1,21 @@
-name: train-my-model
-
-on: [push]
-
+on: workflow_dispatch
 jobs:
-  # deploy-runner:
-  #   runs-on: [ubuntu-latest]
-  #   env:
-  #     REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - uses: iterative/setup-cml@v1
-
-  #     - name: deploy
-  #       shell: bash
-  #       run: |
-  #         cml-runner \
-  #           --reuse \
-  #           --cloud-spot \
-  #           --cloud aws \
-  #           --cloud-region us-west \
-  #           --cloud-type t2.medium \
-  #           --labels cml
-
-  # train:
-  #   timeout-minutes: 5000
-  #   runs-on: [self-hosted,cml]
-  #   needs: deploy-runner
-  #   container: 
-  #     image: docker://dvcorg/cml:0-dvc2-base1
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-
-  #   - name: cml
-  #     env:
-  #       REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
-  #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       AWS_DEFAULT_REGION: us-east-1
-  #       AWS_EC2_METADATA_DISABLED: true
-  #       TB_CREDENTIALS: ${{ secrets.TB_CREDENTIALS }}
-  #     run: |
-  #       sudo apt update && sudo apt install awscli
-  #       pip install -r requirements.txt
-        
-  #       export TB_LOG_DIR=output/tblogs
-  #       TB_URL='Not ready'
-
-  #       echo "# CML report" > report.md
-  #       echo $TB_URL >> report.md
-  #       cml-send-comment --update report.md
-
-  #       python train.py
-        
-  #       echo "# CML report" > report.md
-  #       echo $TB_URL >> report.md
-  #       cat output/metrics.json >> report.md
-  #       cml-publish output/confusion_matrix.png --md >> report.md
-  #       cml-pr --md output/* >> report.md
-  #       cml-send-comment --update report.md
-  #       cml-send-comment --update --pr --commit-sha HEAD report.md
-
-  train-tpi:
-    runs-on: [ubuntu-latest]
-
+  train:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-
-    - name: tpi
+    - run: |
+        terraform init
+        terraform apply --auto-approve
+        terraform refresh
+        terraform show
       env:
-        REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: |
-        git ls-remote
-
-        NAME=fashion_mnist-$GITHUB_RUN_ID
-
-        cat <<EOF > main.tf
-        terraform {
-          required_providers {
-            xpd = {
-              source = "0x2b3bfa0/xpd",
-            }
-          }
-        }
-
-        provider "xpd" {}
-        variable "name" {}
-
-        resource "xpd_task" "task" {
-          cloud     = "aws"
-          machine   = "t2.medium"
-          spot      = 0
-          name      = var.name
-          directory = "."
-          region    = "us-west"
-
-          script = <<-END
-            #!/bin/bash
-            echo "APT::Get::Assume-Yes \"true\";" | sudo tee -a /etc/apt/apt.conf.d/90assumeyes
-
-            sudo apt remove unattended-upgrades
-            systemctl disable apt-daily-upgrade.service
-
-            sudo add-apt-repository universe -y
-            sudo add-apt-repository ppa:git-core/ppa -y
-            sudo apt update && sudo apt-get install -y software-properties-common build-essential git awscli python3-pip
-
-            curl --location https://apt.releases.hashicorp.com/gpg | sudo apt-key add - \
-              && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release --codename --short) main" \
-              && apt update \
-              && apt-get install --yes terraform \
-              && apt-get clean \
-              && rm --recursive --force /var/lib/apt/lists/*
-
-            curl -sL https://deb.nodesource.com/setup_12.x | sudo bash
-            sudo apt update && sudo apt-get install -y nodejs 
-            sudo npm install -g --unsafe @dvcorg/cml
-
-            export HOME=/root
-            export REPO_TOKEN=$REPO_TOKEN
-            export S3_BUCKET=s3://daviddvctest/$NAME
-            export EPOCHS=1
-
-            pip3 install -r requirements.txt
-            python3 train.py
-
-            echo 'fetching'
-            git fetch --all
-            echo 'fetching ends'
-
-            SHA="$(git log -n1 --format=%h)"
-            BASE="$(git branch)"
-            git checkout -b "cml-prrrrr"
-            git add "output/*"
-            git commit -m "CML PR for ${SHA} [skip ci]"
-            git push
-
-            # sudo -E cml-pr --md output/* >> report.md
-            cml-send-comment --update report.md
-            cml-send-comment --update --pr --commit-sha HEAD report.md
-
-            sudo terraform init
-            # sudo terraform destroy -var "name=${NAME}" --auto-approve
-          END
-        }
-        EOF
-
-        terraform init 
-        terraform apply --auto-approve -var "name=${NAME}"
-        terraform refresh -var "name=${NAME}" && terraform show
+        AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+        
+        TF_VAR_name: helio-${{ github.run_id }}
+        TF_VAR_repo_token: ${{ secrets.REPO_TOKEN }}
+        
