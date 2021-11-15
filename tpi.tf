@@ -36,3 +36,4 @@ resource "xpd_task" "task" {
     date > file
     cml pr file 
   END
+}
