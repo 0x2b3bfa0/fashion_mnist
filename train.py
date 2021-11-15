@@ -11,7 +11,7 @@ import tensorflow as tf
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
 S3_BUCKET = os.getenv('S3_BUCKET', 's3://daviddvctest/cache3') 
-EPOCHS = os.getenv('EPOCHS', 1) 
+EPOCHS = int(os.getenv('EPOCHS', 1))
 CHECKPOINT_FOLDER = os.getenv('CHECKPOINT_FOLDER', 'output')
 TB_LOG_DIR = os.getenv('TB_LOG_DIR', os.path.join(CHECKPOINT_FOLDER, 'tblogs'))
 
