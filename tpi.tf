@@ -17,7 +17,7 @@ resource "xpd_task" "task" {
   directory = "."
 
   environment = {
-    REPO_TOKEN = var.repo_token
+    REPO_TOKEN = var.repo_token,
   }
 
   script = <<-END
@@ -25,8 +25,14 @@ resource "xpd_task" "task" {
     export HOME=/root
 
     curl --silent --location https://deb.nodesource.com/setup_14.x | bash
-    apt update && apt install --yes build-essential python3-pip git nodejs
+    apt update
+    apt install --yes build-essential git nodejs python3-pip
     npm install --global --unsafe @dvcorg/cml
+
+    AUTHORIZATION="$(base64 <<< "x-access-token:$REPO_TOKEN")"
+    git config --unset http.https://github.com/.extraheader
+    git config --add http.https://github.com/.extraheader \
+      "AUTHORIZATION: basic $AUTHORIZATION"
 
     # export EPOCHS=1
     # export S3_BUCKET=s3://daviddvctest/$NAME
