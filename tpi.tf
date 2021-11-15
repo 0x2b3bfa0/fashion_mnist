@@ -31,7 +31,7 @@ resource "xpd_task" "task" {
     apt install --yes build-essential git nodejs python3-pip
     npm install --global --unsafe @dvcorg/cml
 
-    AUTHORIZATION="$(base64 <<< "x-access-token:$REPO_TOKEN")"
+    AUTHORIZATION="$(printf "x-access-token:$REPO_TOKEN" | base64)"
     git config --unset http.https://github.com/.extraheader
     git config --add http.https://github.com/.extraheader \
       "AUTHORIZATION: basic $AUTHORIZATION"
