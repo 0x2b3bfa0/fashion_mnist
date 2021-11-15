@@ -78,7 +78,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         git ls-remote
-        
+
         NAME=fashion_mnist-$GITHUB_RUN_ID
 
         cat <<EOF > main.tf
@@ -132,6 +132,8 @@ jobs:
 
             git config --global user.name "DavidGOrtega"
             git config --global user.email "g.ortega.david@gmail.com"
+            git remote set-url origin https://DavidGOrtega:$REPO_TOKEN@github.com/DavidGOrtega/fashion_mnist
+
             cml-pr --md output/* >> report.md
             cml-send-comment --update report.md
             cml-send-comment --update --pr --commit-sha HEAD report.md
