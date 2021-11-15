@@ -137,7 +137,7 @@ jobs:
 
             SHA="$(git log -n1 --format=%h)"
             BASE="$(git branch)"
-            git checkout -b "cml-prrrr"
+            git checkout -b "cml-prrrrr"
             git add "output/*"
             git commit -m "CML PR for ${SHA} [skip ci]"
             git push
